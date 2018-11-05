@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/alexismanin/miashs_rdm#readme",
   "dependencies": {
+    "ejs": "^2.6.1",
     "express": "^4.16.4",
-    "mongoose": "^5.3.9"
+    "mongoose": "^5.3.9",
+    "node-blablacar": "^1.0.2"
   }
 }
