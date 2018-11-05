@@ -1,5 +1,5 @@
 <!doctype html>
-<html style="background-color:white;font-family: monospace;" lang="fr">
+<html style="background-color:white;" lang="fr">
 	<head>
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
@@ -14,7 +14,7 @@
 		<!-- <link rel="stylesheet"	href="style.css" type="text/css" media="screen" /> -->
 		<title>RDM Advisor</title>
 	</head>
-	<body style="background-color:white;font-family: monospace;">
+	<body style="background-color:white;">
 		<nav class="navbar navbar-expand-md navbar fixed-top bg-light">
 			<a href="index.html">Mettre le logo RDM ici</a>
 			<form class="mx-auto d-inline">
@@ -48,12 +48,21 @@
 				<div class="col-4">
 					<div class="card" id="Blablacar">
 						<div class="card-body">
-							<h5 class="card-title">API Blablacar</h5>
-							<ul>
+							<h5 class="card-title"><img class="" src="img/blablacar.png" id="logo" alt="logo_blablacar" height="28" width="28"/> Blablacar</h5>
+							<div>
 								<% for (i = 0; i < bb_result.trips.length; i++){ %>
-									<li><%= bb_result.trips[i].links._front %> - cliquez !</li>
+									<h6> De <%= bb_result.trips[i].departure_place.city_name %> jusqu'à <%= bb_result.trips[i].arrival_place.city_name %></br><%=bb_result.trips[i].departure_date%></h6>
+									<% color = bb_result.trips[i].price.price_color %>
+									<% color = color.toLowerCase() %>
+									<ul>
+										<li> Prix : <span style="color:<%= color %>;"><%= bb_result.trips[i].price.value %> <%= bb_result.trips[i].price.symbol %><span></li>
+										<% if(typeof bb_result.trips[i].car !== "undefined"){ %>
+										<li> Véhicule : <%= bb_result.trips[i].car.make %> <%= bb_result.trips[i].car.model %> </li>
+										<% } %>
+										<li> <a href="<%= bb_result.trips[i].links._front %>">Voir annonce sur Blablacar</a></li>
+									</ul>
 								<% }; %>
-							</ul>
+							</div>
 							<div class="text-right">
 								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
 							</div>
