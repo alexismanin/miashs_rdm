@@ -26,6 +26,10 @@ var bb_db = "" //begin of the period of the requested
 
 const app = express()
 
+// Défini le dossier ou chercher image etc...
+
+app.use( express.static( "public" ) );
+
 // Database client init
 const configDB = require('./config/database.js')
 
