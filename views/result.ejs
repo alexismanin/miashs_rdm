@@ -49,7 +49,11 @@
 					<div class="card" id="Blablacar">
 						<div class="card-body">
 							<h5 class="card-title">API Blablacar</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
+							<ul>
+								<% for (i = 0; i < bb_result.trips.length; i++){ %>
+									<li><%= bb_result.trips[i].links._front %> - cliquez !</li>
+								<% }; %>
+							</ul>
 							<div class="text-right">
 								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
 							</div>
