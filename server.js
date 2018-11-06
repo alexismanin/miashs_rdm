@@ -82,7 +82,6 @@ app.get('/', function (req, res) {
 					var we2_request = require("request");
 					var we_city_result = JSON.parse(body);
 					
-					console.log(we_city_result.length)
 					
 					// Je ne comprends pas ce if mais il fonctionne
 					
@@ -155,12 +154,49 @@ app.get('/', function (req, res) {
 														"X-Mashape-Key": sk_key,
 														"X-Mashape-Host": "skyscanner-skyscanner-flight-search-v1.p.mashape.com"
 													}
+
 												};
 												
 												function sk_routes_callback(error, response, body) {
 													var sk_result_route = JSON.parse(body);
 													if (!error && response.statusCode == 200) {
-														console.log(sk_result_route)
+														//console.log(sk_result_route.Quotes.length)
+														for(j=0;j<sk_result_route.Quotes.length;j++){
+
+															var sk_price=sk_result_route.Quotes[j].MinPrice;
+														//pour le vol d'allé
+															for(i=0;i<sk_result_route.Carriers.length;i++){
+																if(sk_result_route.Quotes[j].OutboundLeg.CarrierIds[0]==sk_result_route.Carriers[0].CarrierId[i]){
+																	var sk_alle_company=sk_result_route.Carriers[0].Name[i]
+																}else if(sk_result_route.Quotes[j].InboundLeg.CarrierIds[0]==sk_result_route.Carriers[0].CarrierId[i]){
+																	var sk_retour_company=sk_result_route.Carriers[0].Name[i]
+																}
+																	
+															}
+															//console.log("for 2 fini")
+															for(i=0;i<sk_result_route.Places.length;i++){
+																if(sk_result_route.Quotes[j].OutboundLeg.OriginId[0]==sk_result_route.Places[0].PlaceId[i]){
+																	var sk_alle_depart_aeroport=sk_result_route.Places[0].Name[i]
+																}else if(sk_result_route.Quotes[j].OutboundLeg.OriginId[0]==sk_result_route.Places[0].PlaceId[i]){
+																	var sk_alle_arrivee_aeroport=sk_result_route.Places[0].Name[i]
+																}
+																	
+															}
+															//console.log("for 3 fini")
+															for(i=0;i<sk_result_route.Places.length;i++){
+																if(sk_result_route.Quotes[j].InboundLeg.OriginId[0]==sk_result_route.Places[0].PlaceId[i]){
+																	var sk_retour_depart_aeroport=sk_result_route.Places[0].Name[i]
+																}else if(sk_result_route.Quotes[j].InboundLeg.OriginId[0]==sk_result_route.Places[0].PlaceId[i]){
+																	var sk_retour_arrivee_aeroport=sk_result_route.Places[0].Name[i]
+																}
+																	
+															}
+															//console.log("for 4 fini")
+
+														}
+														
+														//console.log(sk_price)
+														
 													}
 												}
 												
