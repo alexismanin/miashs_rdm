@@ -132,10 +132,14 @@
 				<div class="col-6">
 					<div class="card" id="Meteo">
 						<div class="card-body">
+							<% if( sky!="nometeo" ){ %>
 							<h5 class="card-title">L'an dernier à cette période : (month/day)</h5>
 							<% for (i = 0; i < sky.length; i++){ %>
 							<p> <%= day[i] %> :
 							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> C° </p>
+							<% } %>
+							<% }else{ %>
+							<h5 class="card-title m-0">Pas d'informations météos, désolé.</h5>
 							<% } %>
 						</div>
 					</div>
