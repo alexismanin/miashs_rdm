@@ -1,5 +1,5 @@
 <!doctype html>
-<html style="background-color:white;font-family: monospace;" lang="fr">
+<html style="background-color:white;" lang="fr">
 	<head>
 		<!-- Required meta tags -->
 		<meta charset="utf-8">
@@ -14,7 +14,7 @@
 		<!-- <link rel="stylesheet"	href="style.css" type="text/css" media="screen" /> -->
 		<title>RDM Advisor</title>
 	</head>
-	<body style="background-color:white;font-family: monospace;">
+	<body style="background-color:white;">
 		<nav class="navbar navbar-expand-md navbar fixed-top bg-light">
 			<a href="index.html">Mettre le logo RDM ici</a>
 			<!-- <div class="btn-group m-2" role="group" aria-label="Button group with nested dropdown" style="background-color:white;"> -->
@@ -34,7 +34,7 @@
 			<!-- </div> -->
     </nav>
 		<div class="container-fluid text-center p-5 mx-auto">
-			<form class="mx-auto d-inline">
+			<form action="/result" method="post" class="mx-auto d-inline">
 				<div class="form-group d-inline-block row p-3 mx-auto">
 					<label class="px-3" for="registerBirthday">D'où voulez-vous partir ?</label>
 					<input class="px-3" type="text" class="form-control-sm" id="depart" placeholder="Départ" name="depart">
@@ -45,7 +45,7 @@
 					<label class="px-3" for="registerBirthday">Date de départ</label>
 					<input class="px-3" type="date" class="form-control-sm" id="date_depart" name="date_depart">
 					<label class="px-3" for="registerBirthday">Date d'arrivée</label>
-					<input class="px-3" type="date" class="form-control-sm" id="date_arrive" name="date_arrive">
+					<input class="px-3" type="date" class="form-control-sm" id="date_retour" name="date_retour">
 				</div>
 				</br>
 				<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
