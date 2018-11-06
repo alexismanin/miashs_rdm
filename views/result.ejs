@@ -63,12 +63,8 @@
 										minZoom: 9
 										}
 										).addTo(map);*/
-										
-									
-									
 									</script>
 								</div>
-							
 						</div>
 					</div>
 				</div>
@@ -77,6 +73,7 @@
 						<div class="card-body">
 							<h5 class="card-title"><img class="" src="img/blablacar.png" id="logo" alt="logo_blablacar" height="28" width="28"/> Blablacar</h5>
 							<div>
+								<% if(bb_result.trips.length!=0){ %>
 								<% for (i = 0; i < bb_result.trips.length; i++){ %>
 									<h6> De <%= bb_result.trips[i].departure_place.city_name %> jusqu'à <%= bb_result.trips[i].arrival_place.city_name %></br><%=bb_result.trips[i].departure_date%></h6>
 									<% color = bb_result.trips[i].price.price_color %>
@@ -88,10 +85,9 @@
 										<% } %>
 										<li> <a href="<%= bb_result.trips[i].links._front %>">Voir annonce sur Blablacar</a></li>
 									</ul>
-								<% }; %>
-							</div>
-							<div class="text-right">
-								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
+								<% }}else{ %>
+								<%= "Pas de covoiturage disponible." %>
+								<% } %>
 							</div>
 						</div>
 					</div>
@@ -136,11 +132,11 @@
 				<div class="col-6">
 					<div class="card" id="Meteo">
 						<div class="card-body">
-							<h5 class="card-title">API Météo</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
-							<div class="text-right">
-								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
-							</div>
+							<h5 class="card-title">L'an dernier à cette période : (month/day)</h5>
+							<% for (i = 0; i < sky.length; i++){ %>
+							<p> <%= day[i] %> :
+							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> C° </p>
+							<% } %>
 						</div>
 					</div>
 				</div>
