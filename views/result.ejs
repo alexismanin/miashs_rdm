@@ -11,12 +11,13 @@
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+		<link rel="stylesheet" href="leaflet/leaflet.css" />
 		<script src="leaflet/leaflet.js"></script>
 		<script src="http://d3js.org/d3.v5.min.js"></script>
 		<style>
 			#divmap {
 
-   				 width: 50px;
+   				width: 100%;
     			height: 200px;
     		}
 		</style>
@@ -132,10 +133,14 @@
 				<div class="col-6">
 					<div class="card" id="Meteo">
 						<div class="card-body">
+							<% if( sky!="nometeo" ){ %>
 							<h5 class="card-title">L'an dernier à cette période : (month/day)</h5>
 							<% for (i = 0; i < sky.length; i++){ %>
 							<p> <%= day[i] %> :
 							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> C° </p>
+							<% } %>
+							<% }else{ %>
+							<h5 class="card-title m-0">Pas d'informations météos, désolé.</h5>
 							<% } %>
 						</div>
 					</div>
