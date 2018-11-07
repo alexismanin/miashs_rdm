@@ -7,6 +7,8 @@
 		<link rel="shortcut icon" href="img/logo.ico">
 		<link rel="stylesheet" href="teleport/autocomplete-0.3.3/teleport-autocomplete.css">
 
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 			<!-- Bootstrap CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
 		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -144,6 +146,10 @@
 							<img id="cityimg" width="100%" alt="Image de la ville"></img>
 							<h5>Description</h5>
 							<div id="citysummary"></div>
+							<h5>Scores</h5>
+							<div id="cityscores">
+
+							</div>
 							<div class="text-right">
 								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
 							</div>
@@ -181,6 +187,28 @@
 					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 						{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 
+					var detail_div = document.getElementById("cityscores");
+					try {
+						respObj.categories.forEach((category) => {
+							var cat_title = document.createElement('p')
+							cat_title.innerHTML = category.name
+							detail_div.appendChild(cat_title)
+							var cat_div = document.createElement('div');
+							cat_div.className = "w3-container";
+							var percent = (category.score_out_of_10*10.0);
+							cat_div.style = "height: 24px; width:"+percent+"%;background-color:"+category.color+"; border-radius:10px"
+							//cat_div.innerHTML = ''+ category.score_out_of_10 + ' / 10'
+
+							var cat_div_parent = document.createElement('div');
+							cat_div_parent.style = "height: 24px; width:100%;background-color:#bbbbbb; border-radius:10px"
+
+							cat_div_parent.appendChild(cat_div)
+							detail_div.appendChild(cat_div_parent)
+							detail_div.appendChild(document.createElement('br'))
+						})
+					} catch (error) {
+						console.log(error)
+					}
 				})
 		</script>
 	</body>
