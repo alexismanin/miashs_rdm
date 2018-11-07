@@ -14,7 +14,6 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
 		<script src="leaflet/leaflet.js"></script>
-		<script src="http://d3js.org/d3.v5.min.js"></script>
 		<script src="teleport/autocomplete-0.3.3/teleport-autocomplete.js"></script>
 
 		<style>
@@ -55,19 +54,6 @@
 						<div class="card-body">
 							<h5 class="card-title">API Skyscanner</h5>
 								<div id="divmap" >
-									<script>
-									var map = L.map('divmap');
-										map.setView([42.35843, -71.05977], 12);
-									//L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-									//	{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
-									L.tileLayer('http://tiles.mapc.org/basemap/{z}/{x}/{y}.png',
-										{ attribution: 'Tiles by <a href="http://mapc.org">MAPC</a>,Data by <a href="http://mass.gov/mgis">MassGIS</a>',maxZoom: 17,minZoom: 9 }).addTo(map);
-									/*L.tileLayer('http://tiles.mapc.org/trailmap-onroad/{z}/{x}/{y}.png',{
-										maxZoom: 17,
-										minZoom: 9
-										}
-										).addTo(map);*/
-									</script>
 								</div>
 						</div>
 					</div>
@@ -151,8 +137,10 @@
 				<div class="col-6">
 					<div class="card" id="InfoVille">
 						<div class="card-body">
-							<h5 class="card-title">API Info Ville</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
+							<h5 class="card-title">Info ville</h5>
+							<p>Population : <strong id="population">Inconnue</strong></p>
+							<p>Maire : <strong id="mayor">Inconnu(e)</strong></p>
+							<img id="cityimg" width="100%" alt="Image de la ville"></img>
 							<div class="text-right">
 								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
 							</div>
@@ -171,6 +159,24 @@
 				 console.log(value);
 				 // TODO: Get back content and make something with it
 			 });
+
+			 fetch("/cityinfo/<%= arrive_id %>/")
+			 	.then((response) => response.json())
+				.then((respObj) => {
+					document.getElementById("population").innerHTML = respObj.population + ' habitants'
+					document.getElementById("mayor").innerHTML = respObj.mayor
+					document.getElementById("cityimg").src = respObj.photo.image.mobile
+					var boundary = [
+						[respObj.bbox.latlon.south, respObj.bbox.latlon.west],
+						[respObj.bbox.latlon.north, respObj.bbox.latlon.east]
+					];
+
+					var map = L.map('divmap');
+					map.fitBounds(boundary);
+					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+						{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
+
+				})
 		</script>
 	</body>
 </html>

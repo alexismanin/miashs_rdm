@@ -25,6 +25,8 @@ var bb_db = "" //begin of the period of the requested
 
 
 const app = express()
+// Route for city information
+require('./application/teleport.js')(app)
 
 // Défini le dossier ou chercher image etc...
 
@@ -47,6 +49,8 @@ app.get('/', function (req, res) {
 
 	// BLABLA
 
+  console.log(req.body);
+
 	var bb_fn	= req.body.depart;
   var coma_idx = bb_fn.indexOf(',');
   if (coma_idx > 0) {
@@ -61,8 +65,10 @@ app.get('/', function (req, res) {
 
 	var bb_db = req.body.date_depart;
 	var bb_fin = req.body.date_retour;
-
 	// BLABLA Interogation API
+
+  var arrive_id = req.body.arriveid
+  var arrive_population = req.body.arrivepopul
 
 	var bb_request = require("request");
 
@@ -187,10 +193,7 @@ app.get('/', function (req, res) {
 
 
 								//
-
-
-
-								res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day});
+								res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day, arrive_id: arrive_id, arrive_population: arrive_population});
 								// console.log(bb_result.trips[0].links._front);
 							}
 						}

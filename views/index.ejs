@@ -49,19 +49,18 @@
 					<input class="px-3" type="date" class="form-control-sm" id="date_retour" name="date_retour">
 				</div>
 				</br>
+				<input hidden id="arriveid" name="arriveid">
+				<input hidden id="arrivepopul" name="arrivepopul">
 				<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
 			</form>
 			<h6 class="p-1" > Bon voyage</h6>
 		</div>
 
 		<script>
-			TeleportAutocomplete.init('#depart').on('change', function(value) {
-				 console.log(value);
-				 // TODO: Get back content and make something with it
-			 });
+			TeleportAutocomplete.init('#depart').on('change', function(value) {});
 	 			TeleportAutocomplete.init('#arrive').on('change', function(value) {
-	 				 console.log(value);
-	 				 // TODO: Get back content and make something with it
+					document.querySelector("#arriveid").value = value.geonameId;
+					document.querySelector("#arrivepopul").value = value.population;
 	 			 });
 		</script>
 	</body>
