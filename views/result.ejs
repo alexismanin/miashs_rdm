@@ -13,7 +13,6 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
 		<script src="leaflet/leaflet.js"></script>
-		<script src="http://d3js.org/d3.v5.min.js"></script>
 		<style>
 			#divmap {
 
@@ -50,7 +49,7 @@
 				<div class="col-4">
 					<div class="card" id="Skyscanner">
 						<div class="card-body">
-							<h5 class="card-title">API Skyscanner</h5>
+							<h5 class="card-title">Carte</h5>
 								<div id="divmap" >
 									<script>
 									var map = L.map('divmap');
@@ -80,7 +79,7 @@
 									<% color = bb_result.trips[i].price.price_color %>
 									<% color = color.toLowerCase() %>
 									<ul>
-										<li> Prix : <span style="color:<%= color %>;"><%= bb_result.trips[i].price.value %> <%= bb_result.trips[i].price.symbol %><span></li>
+										<li> Prix : <span style="color:<%= color %>;"><%= bb_result.trips[i].price.value %> <%= bb_result.trips[i].price.symbol %></span></li>
 										<% if(typeof bb_result.trips[i].car !== "undefined"){ %>
 										<li> Véhicule : <%= bb_result.trips[i].car.make %> <%= bb_result.trips[i].car.model %> </li>
 										<% } %>
@@ -96,11 +95,15 @@
 				<div class="col-4">
 					<div class="card" id="Flixbus">
 						<div class="card-body">
-							<h5 class="card-title">API Flixbus</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
-							<div class="text-right">
-								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
-							</div>
+							<h5 class="card-title">API Skyscanner</h5>
+							<% if(prix.length!=0){ %>
+								<% for (i = 0; i < prix.length; i++){ %>
+									<h6> Aller : <%= AeoAllDep[i] %> jusqu'à <%= AeoAllArr[i] %> avec <%= ComAll%></h6>
+									<h6> Retour : <%= AeoRetDep[i] %> jusqu'à <%= AeoRetArr[i] %> avec <%= ComRet%></h6>
+										<span> Prix : <%= SkPrix[i] %></span></br>
+								<% }}else{ %>
+								<%= "Pas de vols disponibles." %>
+							<% } %>
 						</div>
 					</div>
 				</div>
@@ -137,7 +140,7 @@
 							<h5 class="card-title">L'an dernier à cette période : (month/day)</h5>
 							<% for (i = 0; i < sky.length; i++){ %>
 							<p> <%= day[i] %> :
-							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> C° </p>
+							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> </p>
 							<% } %>
 							<% }else{ %>
 							<h5 class="card-title m-0">Pas d'informations météos, désolé.</h5>
