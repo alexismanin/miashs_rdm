@@ -85,6 +85,7 @@
 										<% } %>
 										<li> <a href="<%= bb_result.trips[i].links._front %>">Voir annonce sur Blablacar</a></li>
 									</ul>
+								<% if(i==5){ i=bb_result.trips.length} %>
 								<% }}else{ %>
 								<%= "Pas de covoiturage disponible." %>
 								<% } %>
@@ -95,12 +96,14 @@
 				<div class="col-4">
 					<div class="card" id="Flixbus">
 						<div class="card-body">
-							<h5 class="card-title">API Skyscanner</h5>
-							<% if(prix.length!=0){ %>
-								<% for (i = 0; i < prix.length; i++){ %>
-									<h6> Aller : <%= AeoAllDep[i] %> jusqu'à <%= AeoAllArr[i] %> avec <%= ComAll%></h6>
-									<h6> Retour : <%= AeoRetDep[i] %> jusqu'à <%= AeoRetArr[i] %> avec <%= ComRet%></h6>
-										<span> Prix : <%= SkPrix[i] %></span></br>
+							<h5 class="card-title"><img class="mr-2" src="img/skyscanner.png" id="logo" alt="logo_blablacar" height="28" width="28"/>Skyscanner</h5>
+							<% if(SkPrix.length!=0){ %>
+								<% for (i = 0; i < SkPrix.length; i++){ %>
+									<span> Prix : <%= SkPrix[i] %> €</span>
+									<h6 class="m-0"> <span class="text-secondary"><u>Aller</u></span> : <%= AeoAllDep[i] %> jusqu'à <%= AeoAllArr[i] %> avec <%= ComAll[i]%></h6>
+									<h6> <span class="text-secondary"><u>Retour</u></span> : <%= AeoRetDep[i] %> jusqu'à <%= AeoRetArr[i] %> avec <%= ComRet[i]%></h6>
+									</br>
+								<% if(i==5){ i=SkPrix.length} %>
 								<% }}else{ %>
 								<%= "Pas de vols disponibles." %>
 							<% } %>
