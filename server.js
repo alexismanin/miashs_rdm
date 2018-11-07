@@ -23,7 +23,6 @@ const bb_format	= "json" // format du la reponse
 const bb_cur = "EUR" // Select the currency you want, depending on the requested locale. Ici euros
 var bb_db = "" //begin of the period of the requested 
 
-
 const app = express()
 
 // Défini le dossier ou chercher image etc...
@@ -196,8 +195,9 @@ app.get('/', function (req, res) {
 													//console.log("for 4 fini")
 
 												}
+						
 												
-												res.render('result.ejs', {bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport});
+												res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport});
 													//console.log(sk_alle_company)
 
 												
@@ -347,7 +347,7 @@ app.get('/', function (req, res) {
 
 														}
 														
-														res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day,SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport});
+														res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin, bb_result: bb_result, sky: sky, temp: temp, day: day,SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport});
 															//console.log(sk_alle_company)
 
 														

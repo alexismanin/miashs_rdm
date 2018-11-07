@@ -31,13 +31,13 @@
 			<form class="mx-auto d-inline">
 				<div class="form-group d-inline row p-3 mx-auto">
 					<label for="registerBirthday">De</label>
-					<input type="text" class="form-control-sm" id="depart" placeholder="Départ" name="depart">
+					<input type="text" class="form-control-sm" id="depart" placeholder="<%= dep %>" name="depart">
 					<label for="registerBirthday"> vers </label>
-					<input type="text" class="form-control-sm" id="arrive" placeholder="Arrivé" name="arrive">
+					<input type="text" class="form-control-sm" id="arrive" placeholder="<%= arr %>" name="arrive">
 					<label for="registerBirthday">, du </label>
-					<input type="date" class="form-control-sm" id="date_depart" name="date_depart">
+					<input type="date" class="form-control-sm" id="date_depart" placeholder="<%= alle %>" name="date_depart">
 					<label for="registerBirthday"> au </label>
-					<input type="date" class="form-control-sm" id="date_retour" name="date_retour">
+					<input type="date" class="form-control-sm" id="date_retour" placeholder="<%= reto %>" name="date_retour">
 				</div>
 				<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
 			</form>
