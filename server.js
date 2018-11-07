@@ -68,7 +68,6 @@ app.get('/', function (req, res) {
 	// BLABLA Interogation API
 
   var arrive_id = req.body.arriveid
-  var arrive_population = req.body.arrivepopul
 
 	var bb_request = require("request");
 
@@ -193,7 +192,7 @@ app.get('/', function (req, res) {
 
 
 								//
-								res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day, arrive_id: arrive_id, arrive_population: arrive_population});
+								res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day, arrive_id: arrive_id});
 								// console.log(bb_result.trips[0].links._front);
 							}
 						}

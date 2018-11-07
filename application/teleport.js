@@ -25,11 +25,16 @@ module.exports = function(app) {
          request.get(uaLink, (error, resp3, uaBody) => {
            uaObj = JSON.parse(uaBody)
            request.get(uaObj._links["ua:images"].href, (error, resp4, imgBody) => {
-             resp.send({
-               population: cityObj.population,
-               bbox: uaObj.bounding_box,
-               mayor: uaObj.mayor,
-               photo: JSON.parse(imgBody).photos[0]
+             request.get(uaObj._links["ua:scores"].href, (error, resp5, scoreBody) => {
+               var scoreObj = JSON.parse(scoreBody)
+               resp.send({
+                 population: cityObj.population,
+                 bbox: uaObj.bounding_box,
+                 mayor: uaObj.mayor,
+                 photo: JSON.parse(imgBody).photos[0],
+                 summary: scoreObj.summary,
+                 categories: scoreObj.categories
+               })
              })
            })
          })

@@ -137,10 +137,13 @@
 				<div class="col-6">
 					<div class="card" id="InfoVille">
 						<div class="card-body">
-							<h5 class="card-title">Info ville</h5>
+							<h4 class="card-title">Info ville</h4>
 							<p>Population : <strong id="population">Inconnue</strong></p>
 							<p>Maire : <strong id="mayor">Inconnu(e)</strong></p>
+							<h5>Aperçu</h5>
 							<img id="cityimg" width="100%" alt="Image de la ville"></img>
+							<h5>Description</h5>
+							<div id="citysummary"></div>
 							<div class="text-right">
 								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
 							</div>
@@ -166,6 +169,8 @@
 					document.getElementById("population").innerHTML = respObj.population + ' habitants'
 					document.getElementById("mayor").innerHTML = respObj.mayor
 					document.getElementById("cityimg").src = respObj.photo.image.mobile
+					document.getElementById("citysummary").innerHTML = respObj.summary
+
 					var boundary = [
 						[respObj.bbox.latlon.south, respObj.bbox.latlon.west],
 						[respObj.bbox.latlon.north, respObj.bbox.latlon.east]
