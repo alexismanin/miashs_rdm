@@ -5,7 +5,6 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="shortcut icon" href="img/logo.ico">
-		<link rel="stylesheet" href="teleport/autocomplete-0.3.3/teleport-autocomplete.css">
 
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
@@ -16,7 +15,10 @@
 		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="leaflet/leaflet.css" />
 		<script src="leaflet/leaflet.js"></script>
+
+		<!-- Auto-complete-->
 		<script src="teleport/autocomplete-0.3.3/teleport-autocomplete.js"></script>
+		<link rel="stylesheet" href="teleport/autocomplete-0.3.3/teleport-autocomplete.css">
 
 		<style>
 			#divmap {
@@ -32,17 +34,17 @@
 	</head>
 	<body style="background-color:white;">
 		<nav class="navbar navbar-expand-md navbar fixed-top bg-light">
-			<a href="index.html">Mettre le logo RDM ici</a>
+			<a href="/"><img class="" src="img/RDMADVISOR.png" id="logo" alt="logo_RDMADVISOR" height="28"/></a>
 			<form class="mx-auto d-inline">
 				<div class="form-group d-inline row p-3 mx-auto">
 					<label for="registerBirthday">De</label>
-					<input type="text" class="form-control-sm" id="depart" placeholder="Départ" name="depart" tabindex="1" autocomplete="off">
+					<input type="text" class="form-control-sm" id="depart" placeholder="<%= dep %>" name="depart">
 					<label for="registerBirthday"> vers </label>
-					<input type="text" class="form-control-sm" id="arrive" placeholder="Arrivé" name="arrive" tabindex="1" autocomplete="off">
+					<input type="text" class="form-control-sm" id="arrive" placeholder="<%= arr %>" name="arrive">
 					<label for="registerBirthday">, du </label>
-					<input type="date" class="form-control-sm" id="date_depart" name="date_depart">
+					<input type="date" class="form-control-sm" id="date_depart" placeholder="<%= alle %>" name="date_depart">
 					<label for="registerBirthday"> au </label>
-					<input type="date" class="form-control-sm" id="date_retour" name="date_retour">
+					<input type="date" class="form-control-sm" id="date_retour" placeholder="<%= reto %>" name="date_retour">
 				</div>
 				<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
 			</form>
@@ -54,7 +56,7 @@
 				<div class="col-4">
 					<div class="card" id="Skyscanner">
 						<div class="card-body">
-							<h5 class="card-title">API Skyscanner</h5>
+							<h5 class="card-title">Carte</h5>
 								<div id="divmap" >
 								</div>
 						</div>
@@ -71,12 +73,13 @@
 									<% color = bb_result.trips[i].price.price_color %>
 									<% color = color.toLowerCase() %>
 									<ul>
-										<li> Prix : <span style="color:<%= color %>;"><%= bb_result.trips[i].price.value %> <%= bb_result.trips[i].price.symbol %><span></li>
+										<li> Prix : <span style="color:<%= color %>;"><%= bb_result.trips[i].price.value %> <%= bb_result.trips[i].price.symbol %></span></li>
 										<% if(typeof bb_result.trips[i].car !== "undefined"){ %>
 										<li> Véhicule : <%= bb_result.trips[i].car.make %> <%= bb_result.trips[i].car.model %> </li>
 										<% } %>
 										<li> <a href="<%= bb_result.trips[i].links._front %>">Voir annonce sur Blablacar</a></li>
 									</ul>
+								<% if(i==5){ i=bb_result.trips.length} %>
 								<% }}else{ %>
 								<%= "Pas de covoiturage disponible." %>
 								<% } %>
@@ -87,11 +90,17 @@
 				<div class="col-4">
 					<div class="card" id="Flixbus">
 						<div class="card-body">
-							<h5 class="card-title">API Flixbus</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
-							<div class="text-right">
-								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
-							</div>
+							<h5 class="card-title"><img class="mr-2" src="img/skyscanner.png" id="logo" alt="logo_blablacar" height="28" width="28"/>Skyscanner</h5>
+							<% if(SkPrix != null && SkPrix.length!=0){ %>
+								<% for (i = 0; i < SkPrix.length; i++){ %>
+									<span> Prix : <%= SkPrix[i] %> €</span>
+									<h6 class="m-0"> <span class="text-secondary"><u>Aller</u></span> : <%= AeoAllDep[i] %> jusqu'à <%= AeoAllArr[i] %> avec <%= ComAll[i]%></h6>
+									<h6> <span class="text-secondary"><u>Retour</u></span> : <%= AeoRetDep[i] %> jusqu'à <%= AeoRetArr[i] %> avec <%= ComRet[i]%></h6>
+									</br>
+								<% if(i==5){ i=SkPrix.length} %>
+								<% }}else{ %>
+								<%= "Pas de vols disponibles." %>
+							<% } %>
 						</div>
 					</div>
 				</div>
@@ -128,7 +137,7 @@
 							<h5 class="card-title">L'an dernier à cette période : (month/day)</h5>
 							<% for (i = 0; i < sky.length; i++){ %>
 							<p> <%= day[i] %> :
-							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> C° </p>
+							<img class="" src="<%= sky[i] %>" id="logo" alt="icon météo" height="56" width="56"/> avec un température de  <%= temp[i] %> </p>
 							<% } %>
 							<% }else{ %>
 							<h5 class="card-title m-0">Pas d'informations météos, désolé.</h5>
@@ -158,58 +167,60 @@
 				</div>
 			</div>
 		</div>
+			</div>
+		</div>
 
-		<script>
-			TeleportAutocomplete.init('#depart').on('change', function(value) {
-				 console.log(value);
-				 // TODO: Get back content and make something with it
-			 });
-			TeleportAutocomplete.init('#arrive').on('change', function(value) {
-				 console.log(value);
-				 // TODO: Get back content and make something with it
-			 });
+			<script>
+				TeleportAutocomplete.init('#depart').on('change', function(value) {
+					 console.log(value);
+					 // TODO: Get back content and make something with it
+				 });
+				TeleportAutocomplete.init('#arrive').on('change', function(value) {
+					 console.log(value);
+					 // TODO: Get back content and make something with it
+				 });
 
-			 fetch("/cityinfo/<%= arrive_id %>/")
-			 	.then((response) => response.json())
-				.then((respObj) => {
-					document.getElementById("population").innerHTML = respObj.population + ' habitants'
-					document.getElementById("mayor").innerHTML = respObj.mayor
-					document.getElementById("cityimg").src = respObj.photo.image.mobile
-					document.getElementById("citysummary").innerHTML = respObj.summary
+				 fetch("/cityinfo/<%= arrive_id %>/")
+					.then((response) => response.json())
+					.then((respObj) => {
+						document.getElementById("population").innerHTML = respObj.population + ' habitants'
+						document.getElementById("mayor").innerHTML = respObj.mayor
+						document.getElementById("cityimg").src = respObj.photo.image.mobile
+						document.getElementById("citysummary").innerHTML = respObj.summary
 
-					var boundary = [
-						[respObj.bbox.latlon.south, respObj.bbox.latlon.west],
-						[respObj.bbox.latlon.north, respObj.bbox.latlon.east]
-					];
+						var boundary = [
+							[respObj.bbox.latlon.south, respObj.bbox.latlon.west],
+							[respObj.bbox.latlon.north, respObj.bbox.latlon.east]
+						];
 
-					var map = L.map('divmap');
-					map.fitBounds(boundary);
-					L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-						{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
+						var map = L.map('divmap');
+						map.fitBounds(boundary);
+						L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+							{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 
-					var detail_div = document.getElementById("cityscores");
-					try {
-						respObj.categories.forEach((category) => {
-							var cat_title = document.createElement('p')
-							cat_title.innerHTML = category.name
-							detail_div.appendChild(cat_title)
-							var cat_div = document.createElement('div');
-							cat_div.className = "w3-container";
-							var percent = (category.score_out_of_10*10.0);
-							cat_div.style = "height: 24px; width:"+percent+"%;background-color:"+category.color+"; border-radius:10px"
-							//cat_div.innerHTML = ''+ category.score_out_of_10 + ' / 10'
+						var detail_div = document.getElementById("cityscores");
+						try {
+							respObj.categories.forEach((category) => {
+								var cat_title = document.createElement('p')
+								cat_title.innerHTML = category.name
+								detail_div.appendChild(cat_title)
+								var cat_div = document.createElement('div');
+								cat_div.className = "w3-container";
+								var percent = (category.score_out_of_10*10.0);
+								cat_div.style = "height: 24px; width:"+percent+"%;background-color:"+category.color+"; border-radius:10px"
+								//cat_div.innerHTML = ''+ category.score_out_of_10 + ' / 10'
 
-							var cat_div_parent = document.createElement('div');
-							cat_div_parent.style = "height: 24px; width:100%;background-color:#bbbbbb; border-radius:10px"
+								var cat_div_parent = document.createElement('div');
+								cat_div_parent.style = "height: 24px; width:100%;background-color:#bbbbbb; border-radius:10px"
 
-							cat_div_parent.appendChild(cat_div)
-							detail_div.appendChild(cat_div_parent)
-							detail_div.appendChild(document.createElement('br'))
-						})
-					} catch (error) {
-						console.log(error)
-					}
-				})
-		</script>
+								cat_div_parent.appendChild(cat_div)
+								detail_div.appendChild(cat_div_parent)
+								detail_div.appendChild(document.createElement('br'))
+							})
+						} catch (error) {
+							console.log(error)
+						}
+					})
+			</script>
 	</body>
 </html>

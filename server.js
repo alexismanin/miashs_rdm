@@ -23,7 +23,6 @@ const bb_format	= "json" // format du la reponse
 const bb_cur = "EUR" // Select the currency you want, depending on the requested locale. Ici euros
 var bb_db = "" //begin of the period of the requested
 
-
 const app = express()
 // Route for city information
 require('./application/teleport.js')(app)
@@ -95,21 +94,183 @@ app.get('/', function (req, res) {
 					var we2_request = require("request");
 					var we_city_result = JSON.parse(body);
 
-					console.log(we_city_result.length)
 
 					// Je ne comprends pas ce if mais il fonctionne
 
 					if(we_city_result.length == 0){
 						var sky = "nometeo"
-						res.render('result.ejs', {bb_result: bb_result, sky: sky, day:[], temp:[]});
+						//res.render('result.ejs', {bb_result: bb_result, sky: sky, day:[], temp:[]});
+						//BLOBLOBLOOOOOO
+
+						// console.log("https://www.metaweather.com/static/img/weather/"+we2_result[3].weather_state_abbr+".svg")
+						// console.log(we2_result[3].the_temp)
+						// console.log(we2_result[3].created)
+
+
+						// SKYCANNER
+
+						var sk_key = process.env.SKKEY
+            console.log(sk_key)
+
+						// Depart
+
+						var sk_depart_request = require("request");
+
+						var sk_depart_options = {
+							url: "https://skyscanner-skyscanner-flight-search-v1.p.mashape.com/apiservices/autosuggest/v1.0/FR/EUR/fr-FR/?query="+bb_fn,
+							headers: {
+								"X-Mashape-Key": sk_key,
+								"X-Mashape-Host": "skyscanner-skyscanner-flight-search-v1.p.mashape.com"
+							}
+						};
+
+						function sk_depart_callback(error, response, body) {
+              if (error != null || response.statusCode != 200) {
+                if (error) {
+                  console.log(error)
+                } else if (response.statusCode != 200) {
+                  console.log("response: "+response.statusCode+"\n"+body)
+                }
+                res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: null,ComAll: null,ComRet: null,AeoAllDep: null,AeoAllArr: null,AeoRetDep: null,AeoRetArr: null, arrive_id: arrive_id});
+              } else {
+                console.log("Arrive here: departure")
+    						var sk_result_dep = JSON.parse(body);
+								var sk_aeo_dep = sk_result_dep.Places[0].PlaceId
+
+								// Arrivée
+
+								var sk_arrive_request = require("request");
+
+								var sk_arrive_options = {
+									url: "https://skyscanner-skyscanner-flight-search-v1.p.mashape.com/apiservices/autosuggest/v1.0/FR/EUR/fr-FR/?query="+bb_tn,
+									headers: {
+										"X-Mashape-Key": sk_key,
+										"X-Mashape-Host": "skyscanner-skyscanner-flight-search-v1.p.mashape.com"
+									}
+								};
+
+								function sk_arrive_callback(error, response, body) {
+                  if (error) {
+                    console.log(error)
+                  } else if (response.statusCode != 200) {
+
+                    console.log("response: "+response.statusCode+"\n"+body)
+                  }
+									var sk_result_arr = JSON.parse(body);
+									if (!error && response.statusCode == 200) {
+                    console.log("Arrive here: arrive")
+										var sk_aeo_arr = sk_result_arr.Places[0].PlaceId
+
+										// Récupération des vols
+
+										var sk_route_request = require("request");
+
+										var sk_routes_options = {
+											url: "https://skyscanner-skyscanner-flight-search-v1.p.mashape.com/apiservices/browseroutes/v1.0/FR/EUR/fr-FR/"+sk_aeo_dep+"/"+sk_aeo_arr+"/"+bb_db+"/"+bb_fin,
+											headers: {
+												"X-Mashape-Key": sk_key,
+												"X-Mashape-Host": "skyscanner-skyscanner-flight-search-v1.p.mashape.com"
+											}
+
+										};
+
+										function sk_routes_callback(error, response, body) {
+											var sk_result_route = JSON.parse(body);
+											//console.log(sk_result_route)
+											if (!error && response.statusCode == 200) {
+												//console.log(sk_result_route.Quotes.length)
+												var sk_price=[]
+												var sk_retour_company=[]
+												var sk_alle_company=[]
+												var sk_alle_arrivee_aeroport=[]
+												var sk_alle_depart_aeroport=[]
+												var sk_retour_arrivee_aeroport=[]
+												var sk_retour_depart_aeroport=[]
+												for(j=0;j<sk_result_route.Quotes.length;j++){
+													sk_price.push(sk_result_route.Quotes[j].MinPrice);
+												//pour le vol d'allé
+													for(i=0;i<sk_result_route.Carriers.length;i++){
+
+														if(sk_result_route.Quotes[j].OutboundLeg.CarrierIds[0]==sk_result_route.Carriers[i].CarrierId){
+															 sk_alle_company.push(sk_result_route.Carriers[i].Name)
+														}
+														if(sk_result_route.Quotes[j].InboundLeg.CarrierIds[0]==sk_result_route.Carriers[i].CarrierId){
+															 sk_retour_company.push(sk_result_route.Carriers[i].Name)
+														}
+													}
+													//console.log(sk_alle_company)
+
+													for(i=0;i<sk_result_route.Places.length;i++){
+
+														if(sk_result_route.Quotes[j].OutboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+															 sk_alle_depart_aeroport.push(sk_result_route.Places[i].Name)
+														}
+														if(sk_result_route.Quotes[j].InboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+															 sk_alle_arrivee_aeroport.push(sk_result_route.Places[i].Name)
+														}
+													//console.log(sk_alle_arrivee_aeroport)
+													//console.log(sk_alle_depart_aeroport)
+													}
+
+													for(i=0;i<sk_result_route.Places.length;i++){
+
+														if(sk_result_route.Quotes[j].InboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+															 sk_retour_depart_aeroport.push(sk_result_route.Places[i].Name)
+														}else if(sk_result_route.Quotes[j].OutboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+															 sk_retour_arrivee_aeroport.push(sk_result_route.Places[i].Name)
+														}
+													//console.log(sk_retour_depart_aeroport)
+													}
+													//console.log("for 4 fini")
+
+												}
+
+
+												res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport, arrive_id: arrive_id});
+													//console.log(sk_alle_company)
+
+
+											}
+										}
+
+										sk_route_request(sk_routes_options, sk_routes_callback)
+
+									}
+								}
+
+								sk_arrive_request(sk_arrive_options, sk_arrive_callback)
+
+							}
+						}
+
+						sk_depart_request(sk_depart_options, sk_depart_callback);
+
+
+
+						//
+
+
+
+						//res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day});
+						// console.log(bb_result.trips[0].links._front);
+
+						//BloBloBloBlo
+
 					}
 					else{
 
-						var year_debut = (parseInt(bb_db.slice(0, 4))-1).toString()
+						var year_debut = (parseInt(bb_fin.slice(0, 4))-1).toString()
 						var month_debut = bb_fin.slice(5, 7)
 						var day_debut = bb_fin.slice(8, 10)
 
 						function we2_callback(error, response, body) {
+
+                if (error) {
+                  console.log(error)
+                } else if (response.statusCode != 200) {
+                  console.log("response: "+response.statusCode+"\n"+body)
+                }
+
 							var we2_result = JSON.parse(body);
 							if (!error && response.statusCode == 200) {
 								// console.log("https://www.metaweather.com/static/img/weather/"+we2_result[3].weather_state_abbr+".svg")
@@ -123,6 +284,7 @@ app.get('/', function (req, res) {
 								// SKYCANNER
 
 								var sk_key = process.env.SKKEY
+                console.log(sk_key)
 
 								// Depart
 
@@ -137,6 +299,15 @@ app.get('/', function (req, res) {
 								};
 
 								function sk_depart_callback(error, response, body) {
+
+                    if (error) {
+                      console.log(error)
+                    } else if (response.statusCode != 200) {
+                      console.log("response: "+response.statusCode+"\n"+body)
+                      res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: null,ComAll: null,ComRet: null,AeoAllDep: null,AeoAllArr: null,AeoRetDep: null,AeoRetArr: null, arrive_id: arrive_id});
+
+                    }
+
 									var sk_result_dep = JSON.parse(body);
 									if (!error && response.statusCode == 200) {
 										var sk_aeo_dep = sk_result_dep.Places[0].PlaceId
@@ -168,12 +339,64 @@ app.get('/', function (req, res) {
 														"X-Mashape-Key": sk_key,
 														"X-Mashape-Host": "skyscanner-skyscanner-flight-search-v1.p.mashape.com"
 													}
+
 												};
 
 												function sk_routes_callback(error, response, body) {
 													var sk_result_route = JSON.parse(body);
+													//console.log(sk_result_route)
 													if (!error && response.statusCode == 200) {
-														console.log(sk_result_route)
+														//console.log(sk_result_route.Quotes.length)
+														var sk_price=[]
+														var sk_retour_company=[]
+														var sk_alle_company=[]
+														var sk_alle_arrivee_aeroport=[]
+														var sk_alle_depart_aeroport=[]
+														var sk_retour_arrivee_aeroport=[]
+														var sk_retour_depart_aeroport=[]
+														for(j=0;j<sk_result_route.Quotes.length;j++){
+															sk_price.push(sk_result_route.Quotes[j].MinPrice);
+														//pour le vol d'allé
+															for(i=0;i<sk_result_route.Carriers.length;i++){
+
+																if(sk_result_route.Quotes[j].OutboundLeg.CarrierIds[0]==sk_result_route.Carriers[i].CarrierId){
+																	 sk_alle_company.push(sk_result_route.Carriers[i].Name)
+																}
+																if(sk_result_route.Quotes[j].InboundLeg.CarrierIds[0]==sk_result_route.Carriers[i].CarrierId){
+																	 sk_retour_company.push(sk_result_route.Carriers[i].Name)
+																}
+															}
+															//console.log(sk_alle_company)
+
+															for(i=0;i<sk_result_route.Places.length;i++){
+
+																if(sk_result_route.Quotes[j].OutboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+																	 sk_alle_depart_aeroport.push(sk_result_route.Places[i].Name)
+																}
+																if(sk_result_route.Quotes[j].InboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+																	 sk_alle_arrivee_aeroport.push(sk_result_route.Places[i].Name)
+																}
+															//console.log(sk_alle_arrivee_aeroport)
+															//console.log(sk_alle_depart_aeroport)
+															}
+
+															for(i=0;i<sk_result_route.Places.length;i++){
+
+																if(sk_result_route.Quotes[j].InboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+																	 sk_retour_depart_aeroport.push(sk_result_route.Places[i].Name)
+																}else if(sk_result_route.Quotes[j].OutboundLeg.OriginId==sk_result_route.Places[i].PlaceId){
+																	 sk_retour_arrivee_aeroport.push(sk_result_route.Places[i].Name)
+																}
+															//console.log(sk_retour_depart_aeroport)
+															}
+															//console.log("for 4 fini")
+
+														}
+
+														res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin, bb_result: bb_result, sky: sky, temp: temp, day: day,SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport, arrive_id:arrive_id});
+															//console.log(sk_alle_company)
+
+
 													}
 												}
 
@@ -192,7 +415,10 @@ app.get('/', function (req, res) {
 
 
 								//
-								res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day, arrive_id: arrive_id});
+
+
+
+								//res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day});
 								// console.log(bb_result.trips[0].links._front);
 							}
 						}
