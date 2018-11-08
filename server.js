@@ -230,7 +230,7 @@ app.get('/', function (req, res) {
 					}
 					else{
 					
-						var year_debut = (parseInt(bb_db.slice(0, 4))-1).toString()
+						var year_debut = (parseInt(bb_fin.slice(0, 4))-1).toString()
 						var month_debut = bb_fin.slice(5, 7)
 						var day_debut = bb_fin.slice(8, 10)
 						
