@@ -24,7 +24,7 @@
 			#divmap {
 
    				width: 100%;
-    			height: 200px;
+    			height: 500px;
     		}
 		</style>
 
@@ -35,33 +35,11 @@
 	<body style="background-color:white;">
 		<nav class="navbar navbar-expand-md navbar fixed-top bg-light">
 			<a href="/"><img class="" src="img/RDMADVISOR.png" id="logo" alt="logo_RDMADVISOR" height="28"/></a>
-			<form class="mx-auto d-inline">
-				<div class="form-group d-inline row p-3 mx-auto">
-					<label for="registerBirthday">De</label>
-					<input type="text" class="form-control-sm" id="depart" placeholder="<%= dep %>" name="depart">
-					<label for="registerBirthday"> vers </label>
-					<input type="text" class="form-control-sm" id="arrive" placeholder="<%= arr %>" name="arrive">
-					<label for="registerBirthday">, du </label>
-					<input type="date" class="form-control-sm" id="date_depart" placeholder="<%= alle %>" name="date_depart">
-					<label for="registerBirthday"> au </label>
-					<input type="date" class="form-control-sm" id="date_retour" placeholder="<%= reto %>" name="date_retour">
-				</div>
-				<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
-			</form>
     </nav>
 		<div style="height:43px;"></div>
 		<div class="container-fluid text-left p-4 mx-auto">
 
 			<div class="row p-3">
-				<div class="col-4">
-					<div class="card" id="Skyscanner">
-						<div class="card-body">
-							<h5 class="card-title">Carte</h5>
-								<div id="divmap" >
-								</div>
-						</div>
-					</div>
-				</div>
 				<div class="col-4">
 					<div class="card" id="Blablacar">
 						<div class="card-body">
@@ -104,34 +82,41 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row p-3">
-				<div class="col-6">
-					<div class="card" id="Booking">
+				<div class="col-4">
+					<div class="card" id="Flixbus">
 						<div class="card-body">
-							<h5 class="card-title">API Booking</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
-							<div class="text-right">
-								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
-							</div>
+							<h5 class="card-title"><img class="mr-2" src="img/calendar.svg" id="logo" alt="logo_blablacar" height="28"/>Changer la recherche ?</h5>
+							<form action="/result" method="post" class="mx-auto d-inline">
+								<div class="form-group d-inline-block row p-3 mx-auto">
+									<label class="px-3" for="registerBirthday">D'où voulez-vous partir ?</label>
+									<input class="px-3" type="text" class="form-control-sm" id="depart" placeholder="<%= dep %>" name="depart" tabindex="1" autocomplete="off">
+									<label class="px-3" for="registerBirthday">Vers où ?</label>
+									<input class="px-3" type="text" class="form-control-sm" id="arrive" placeholder="<%= arr %>" name="arrive" tabindex="1" autocomplete="off">
+								</div>
+								<div class="form-group d-inline-block row p-3 mx-auto">
+									<label class="px-3 d-block" for="registerBirthday">Date de départ</label>
+									<input class="px-3 d-block form-control tp-ac__input" type="date" class="form-control-sm" id="date_depart" name="date_depart">
+									<label class="px-3 d-block" for="registerBirthday">Date de retour</label>
+									<input class="px-3 d-block form-control tp-ac__input" type="date" class="form-control-sm" id="date_retour" name="date_retour">
+								</div>
+								</br>
+								<input hidden id="arriveid" name="arriveid">
+								<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
+							</form>
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
-					<div class="card" id="TripAdvisor">
-						<div class="card-body">
-							<h5 class="card-title">API TripAdvisor</h5>
-							<div>FAIRE TOUT SON CODE ICI</div>
-							<div class="text-right">
-								<button href="#" class="btn btn-dark btn-sm">Ca me plait !</button>
-							</div>
-						</div>
-					</div>
-				</div>
 			</div>
 			<div class="row p-3">
 				<div class="col-6">
-					<div class="card" id="Meteo">
+					<div class="card" id="Carte">
+						<div class="card-body">
+							<h5 class="card-title">Carte</h5>
+								<div id="divmap" >
+								</div>
+						</div>
+					</div>
+					<div class="card mt-3" id="Meteo">
 						<div class="card-body">
 							<% if( sky!="nometeo" ){ %>
 							<h5 class="card-title">L'an dernier à cette période : (month/day)</h5>
@@ -148,9 +133,15 @@
 				<div class="col-6">
 					<div class="card" id="InfoVille">
 						<div class="card-body">
-							<h4 class="card-title">Info ville</h4>
-							<p>Population : <strong id="population">Inconnue</strong></p>
-							<p>Maire : <strong id="mayor">Inconnu(e)</strong></p>
+							<h5 class="card-title">Info ville : <%= arr %></h5>
+							<div class="row p-3">
+								<div class="col-6">
+									<p>Population : <strong id="population">Inconnue</strong></p>
+								</div>
+								<div class="col-6">
+									<p>Maire : <strong id="mayor">Inconnu(e)</strong></p>
+								</div>
+							</div>
 							<h5>Aperçu</h5>
 							<img id="cityimg" width="100%" alt="Image de la ville"></img>
 							<h5>Description</h5>
@@ -171,14 +162,10 @@
 		</div>
 
 			<script>
-				TeleportAutocomplete.init('#depart').on('change', function(value) {
-					 console.log(value);
-					 // TODO: Get back content and make something with it
-				 });
-				TeleportAutocomplete.init('#arrive').on('change', function(value) {
-					 console.log(value);
-					 // TODO: Get back content and make something with it
-				 });
+			TeleportAutocomplete.init('#depart').on('change', function(value) {});
+	 			TeleportAutocomplete.init('#arrive').on('change', function(value) {
+					document.querySelector("#arriveid").value = value.geonameId;
+	 			 });
 
 				 fetch("/cityinfo/<%= arrive_id %>/")
 					.then((response) => response.json())
@@ -201,26 +188,26 @@
 						var detail_div = document.getElementById("cityscores");
 						try {
 							respObj.categories.forEach((category) => {
-								var cat_title = document.createElement('p')
+								var cat_title = document.createElement('span')
 								cat_title.innerHTML = category.name
 								detail_div.appendChild(cat_title)
 								var cat_div = document.createElement('div');
 								cat_div.className = "w3-container";
 								var percent = (category.score_out_of_10*10.0);
-								cat_div.style = "height: 24px; width:"+percent+"%;background-color:"+category.color+"; border-radius:10px"
+								cat_div.style = "height: 12px; width:"+percent+"%;background-color:"+category.color+"; border-radius:5px; margin-bottom:4px;"
 								//cat_div.innerHTML = ''+ category.score_out_of_10 + ' / 10'
 
 								var cat_div_parent = document.createElement('div');
-								cat_div_parent.style = "height: 24px; width:100%;background-color:#bbbbbb; border-radius:10px"
+								cat_div_parent.style = "height: 12px; width:100%;background-color:#bbbbbb; border-radius:5px; margin-bottom:4px;"
 
 								cat_div_parent.appendChild(cat_div)
 								detail_div.appendChild(cat_div_parent)
-								detail_div.appendChild(document.createElement('br'))
 							})
 						} catch (error) {
 							console.log(error)
 						}
 					})
+					
 			</script>
 	</body>
 </html>
