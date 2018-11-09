@@ -1,6 +1,6 @@
 # Dissertation : Web et interopérabilité
 
-*Auteur :* Alexis Manin
+*Auteur :* Alexis Manin  
 *Date :* 9 novembre 2018
 
 ## Introduction
