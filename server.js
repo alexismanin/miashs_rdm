@@ -23,6 +23,15 @@ const bb_format	= "json" // format du la reponse
 const bb_cur = "EUR" // Select the currency you want, depending on the requested locale. Ici euros
 var bb_db = "" //begin of the period of the requested
 
+var now = new Date()
+console.log(now)
+//var options = {year: 'numeric', month: 'numeric', day: 'numeric' };
+var j6 = new Date(now.setDate(now.getDate()+6))
+
+//.toLocaleDateString("fr-FR", options)
+
+console.log(j6)
+
 const app = express()
 // Route for city information
 require('./application/teleport.js')(app)
@@ -64,6 +73,9 @@ app.get('/', function (req, res) {
 
 	var bb_db = req.body.date_depart;
 	var bb_fin = req.body.date_retour;
+	console.log(bb_db)
+	var date_deb = Date.parse(bb_db)
+	console.log(date_deb)
 	// BLABLA Interogation API
 
   var arrive_id = req.body.arriveid
@@ -110,7 +122,6 @@ app.get('/', function (req, res) {
 						// SKYCANNER
 
 						var sk_key = process.env.SKKEY
-            console.log(sk_key)
 
 						// Depart
 
@@ -131,7 +142,7 @@ app.get('/', function (req, res) {
                 } else if (response.statusCode != 200) {
                   console.log("response: "+response.statusCode+"\n"+body)
                 }
-                res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: null,ComAll: null,ComRet: null,AeoAllDep: null,AeoAllArr: null,AeoRetDep: null,AeoRetArr: null, arrive_id: arrive_id});
+                res.render('result.ejs', {loin:false, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: null,ComAll: null,ComRet: null,AeoAllDep: null,AeoAllArr: null,AeoRetDep: null,AeoRetArr: null, arrive_id: arrive_id});
               } else {
                 console.log("Arrive here: departure")
     						var sk_result_dep = JSON.parse(body);
@@ -158,7 +169,6 @@ app.get('/', function (req, res) {
                   }
 									var sk_result_arr = JSON.parse(body);
 									if (!error && response.statusCode == 200) {
-                    console.log("Arrive here: arrive")
 										var sk_aeo_arr = sk_result_arr.Places[0].PlaceId
 
 										// Récupération des vols
@@ -226,7 +236,7 @@ app.get('/', function (req, res) {
 												}
 
 
-												res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport, arrive_id: arrive_id});
+												res.render('result.ejs', {loin : false, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport, arrive_id: arrive_id});
 													//console.log(sk_alle_company)
 
 
@@ -259,9 +269,39 @@ app.get('/', function (req, res) {
 					}
 					else{
 
-						var year_debut = (parseInt(bb_fin.slice(0, 4))-1).toString()
-						var month_debut = bb_fin.slice(5, 7)
-						var day_debut = bb_fin.slice(8, 10)
+						if (date_deb > j6){
+							
+							var d = new Date(bb_db);
+							console.log(d)
+							var d3 = new Date(d.setDate(d.getDate()))
+							console.log(d3)
+							var year_debut = d3.getFullYear()
+							year_debut = (parseInt(year_debut)-1)
+							console.log(year_debut)
+							var month_debut = d3.getMonth()+1
+							console.log(month_debut)
+							var day_debut = d3.getDate()
+							console.log(day_debut)
+							var loin = true
+							
+						}
+						else{
+							
+							var d = new Date(bb_db);
+							console.log(d)
+							var d3 = new Date(d.setDate(d.getDate()))
+							console.log(d3)
+							var year_debut = d3.getFullYear()
+							console.log(year_debut)
+							var month_debut = d3.getMonth()+1
+							console.log(month_debut)
+							var day_debut = d3.getDate()
+							console.log(day_debut)
+							var loin = false
+						}
+						var sky = []
+						var temp = []
+						var day = []
 
 						function we2_callback(error, response, body) {
 
@@ -273,18 +313,40 @@ app.get('/', function (req, res) {
 
 							var we2_result = JSON.parse(body);
 							if (!error && response.statusCode == 200) {
-								// console.log("https://www.metaweather.com/static/img/weather/"+we2_result[3].weather_state_abbr+".svg")
+									// console.log("https://www.metaweather.com/static/img/weather/"+we2_result[3].weather_state_abbr+".svg")
 								// console.log(we2_result[3].the_temp)
-								// console.log(we2_result[3].created)
+								//console.log(we2_result)
+								
+								if(sky.length<3){
+									console.log(loin)
+									sky.push("https://www.metaweather.com/static/img/weather/"+we2_result[3].weather_state_abbr+".svg")
+									temp.push(we2_result[3].the_temp)
+									day.push(we2_result[3].applicable_date.slice(5, 10))
+									console.log("timeounin :"+d.getDate())
+									d3 = new Date(d.setDate(d.getDate()+1))
+									console.log(d3)
+									year_debut = d3.getFullYear()
+									if (date_deb > j6){
+										year_debut = (parseInt(year_debut)-1)
+									}
+									console.log(year_debut)
+									month_debut = d3.getMonth()+1
+									console.log(month_debut)
+									day_debut = d3.getDate()
+									console.log(day_debut)
+									
+									var we2_options = {
+										url: "https://www.metaweather.com/api/location/"+we_city_result[0].woeid+"/"+year_debut+"/"+month_debut+"/"+day_debut+"/"
+									};
+									
+									we2_request(we2_options, we2_callback);
 
-								var sky = ["https://www.metaweather.com/static/img/weather/"+we2_result[3].weather_state_abbr+".svg", "https://www.metaweather.com/static/img/weather/"+we2_result[19].weather_state_abbr+".svg", "https://www.metaweather.com/static/img/weather/"+we2_result[35].weather_state_abbr+".svg"];
-								var temp = [we2_result[3].the_temp, we2_result[19].the_temp, we2_result[35].the_temp];
-								var day = [we2_result[3].created.slice(5, 10), we2_result[19].created.slice(5, 10), we2_result[35].created.slice(5, 10)];
-
+								}								
+								else{
+								console.log("debut sk")
 								// SKYCANNER
 
 								var sk_key = process.env.SKKEY
-                console.log(sk_key)
 
 								// Depart
 
@@ -304,7 +366,7 @@ app.get('/', function (req, res) {
                       console.log(error)
                     } else if (response.statusCode != 200) {
                       console.log("response: "+response.statusCode+"\n"+body)
-                      res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],SkPrix: null,ComAll: null,ComRet: null,AeoAllDep: null,AeoAllArr: null,AeoRetDep: null,AeoRetArr: null, arrive_id: arrive_id});
+                      res.render('result.ejs', {loin:loin, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:day, temp:temp,SkPrix: null,ComAll: null,ComRet: null,AeoAllDep: null,AeoAllArr: null,AeoRetDep: null,AeoRetArr: null, arrive_id: arrive_id});
 
                     }
 
@@ -393,7 +455,7 @@ app.get('/', function (req, res) {
 
 														}
 
-														res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin, bb_result: bb_result, sky: sky, temp: temp, day: day,SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport, arrive_id:arrive_id});
+														res.render('result.ejs', {dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin, bb_result: bb_result, sky: sky, temp: temp, day: day,SkPrix: sk_price,ComAll: sk_alle_company,ComRet: sk_retour_company,AeoAllDep: sk_alle_depart_aeroport,AeoAllArr: sk_alle_arrivee_aeroport,AeoRetDep: sk_retour_depart_aeroport,AeoRetArr: sk_retour_arrivee_aeroport, arrive_id:arrive_id, loin: loin});
 															//console.log(sk_alle_company)
 
 
@@ -420,6 +482,7 @@ app.get('/', function (req, res) {
 
 								//res.render('result.ejs', {bb_result: bb_result, sky: sky, temp: temp, day: day});
 								// console.log(bb_result.trips[0].links._front);
+								}
 							}
 						}
 
