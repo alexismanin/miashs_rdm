@@ -2,53 +2,53 @@
 
 **DISSERTATION**
 
-**En quoi l&#39;interopérabilité est-elle un élément essentiel pour l&#39;Open Data et dans le domaine de la data science ?**
+**En quoi l&#39;interopÃ©rabilitÃ© est-elle un Ã©lÃ©ment essentiel pour l&#39;Open Data et dans le domaine de la data science ?**
 
-Nous allons commencer par définir ce qu&#39;est l&#39;interopérabilité au sens général puis plus spécifiquement au domaine de l&#39;informatique. Nous expliquerons pourquoi le web est un bon exemple de l&#39;interopérabilité et ce que cela lui apporte.
+Nous allons commencer par dÃ©finir ce qu&#39;est l&#39;interopÃ©rabilitÃ© au sens gÃ©nÃ©ral puis plus spÃ©cifiquement au domaine de l&#39;informatique. Nous expliquerons pourquoi le web est un bon exemple de l&#39;interopÃ©rabilitÃ© et ce que cela lui apporte.
 
-Ensuite nous aborderons la question de l&#39;open data et nous dirons pourquoi l&#39;interopérabilité est essentielle dans le développement de celui-ci et en quoi cela améliore les performances de la data science.
+Ensuite nous aborderons la question de l&#39;open data et nous dirons pourquoi l&#39;interopÃ©rabilitÃ© est essentielle dans le dÃ©veloppement de celui-ci et en quoi cela amÃ©liore les performances de la data science et de l'impact pour le data scientist.
+*********************************************************
+On parle d&#39;interopÃ©rabilitÃ© lorsqu&#39;on a au moins deux systÃ¨mes capables de communiquer et de s&#39;Ã©changer des donnÃ©es sans effort de la part de l&#39;un ou de l&#39;autre pour se comprendre. L&#39;interopÃ©rabilitÃ© se retrouve dans d&#39;innombrables domaines tels que les rÃ©seaux routiers, ferroviaires, aÃ©riens, la tÃ©lÃ©phonie, les forces armÃ©es,â€¦.
 
-On parle d&#39;interopérabilité lorsqu&#39;on a au moins deux systèmes capables de communiquer et de s&#39;échanger des données sans effort de la part de l&#39;un ou de l&#39;autre pour se comprendre. L&#39;interopérabilité se retrouve dans d&#39;innombrables domaines tels que les réseaux routiers, ferroviaires, aériens, la téléphonie, les forces armées,….
+Par exemple, l&#39;interopÃ©rabilitÃ© dans la tÃ©lÃ©phonie permet Ã  deux personnes de se parler au tÃ©lÃ©phone sans pour autant qu&#39;elles aient le mÃªme opÃ©rateur ni la mÃªme marque de tÃ©lÃ©phone. Cela sous-entend que des rÃ©seaux tÃ©lÃ©phoniques hÃ©tÃ©rogÃ¨nes (gÃ©rÃ©s par les opÃ©rateurs diffÃ©rents) et des matÃ©riels divers respectent les mÃªmes normes de communication (donnÃ©es, signaux, cÃ¢ble, courant, ...). En informatique, l&#39;interopÃ©rabilitÃ© repose donc sur la crÃ©ation et le respect de standards dÃ©crivant des formats et des rÃ¨gles d&#39;Ã©change des donnÃ©es Ã  travers ces formats. Ã€ l&#39;opposÃ©, un frein Ã  l&#39;interopÃ©rabilitÃ© est l&#39;utilisation d&#39;un format de fichier propriÃ©taire par un logiciel qui empÃªche son exploitation par un utilisateur tiers qui ne connaitrait pas ce format.
+****************************************************
+Le web (raccourci de World Wide Web) a Ã©tÃ© crÃ©Ã© Ã  la fin des annÃ©es 80 pour permettre d&#39;Ã©changer des informations sous forme de pages directement consultables via un outil de navigation (client lÃ©ger) depuis son ordinateur.
 
-Par exemple, l&#39;interopérabilité dans la téléphonie permet à deux personnes de se parler au téléphone sans pour autant qu&#39;elles aient le même opérateur ni la même marque de téléphone. Cela sous-entend que des réseaux téléphoniques hétérogènes (gérés par les opérateurs différents) et des matériels divers respectent les mêmes normes de communication (données, signaux, câble, courant, ...). En informatique, l&#39;interopérabilité repose donc sur la création et le respect de standards décrivant des formats et des règles d&#39;échange des données à travers ces formats. À l&#39;opposé, un frein à l&#39;interopérabilité est l&#39;utilisation d&#39;un format de fichier propriétaire par un logiciel qui empêche son exploitation par un utilisateur tiers qui ne connaitrait pas ce format.
-
-Le web (raccourci de World Wide Web) a été créé à la fin des années 80 pour permettre d&#39;échanger des informations sous forme de pages directement consultables via un outil de navigation (client léger) depuis son ordinateur.
-
-Le web est une application d&#39;internet qui lui est un réseau de réseaux, qui permet donc de relier un ensemble de machines à travers le monde. L&#39;idée est de pouvoir passer d&#39;une page (principe de l&#39;hyper texte) à une autre sans avoir à les stocker sur sa propre machine ni même de savoir où elles sont hébergées. Chaque page est identifiée par une adresse unique (URI) accessible depuis n&#39;importe où.
+Le web est une application d&#39;internet qui lui est un rÃ©seau de rÃ©seaux, qui permet donc de relier un ensemble de machines Ã  travers le monde. L&#39;idÃ©e est de pouvoir passer d&#39;une page (principe de l&#39;hyper texte) Ã  une autre sans avoir Ã  les stocker sur sa propre machine ni mÃªme de savoir oÃ¹ elles sont hÃ©bergÃ©es. Chaque page est identifiÃ©e par une adresse unique (URI) accessible depuis n&#39;importe oÃ¹.
 
 **L&#39;objectif est de n&#39;avoir qu&#39;un seul web partout et pour tous.**
 
-Les communications entre le navigateur de l&#39;utilisateur et le serveur qui fournit l&#39;information sont gérées par le protocole HTTP.
+Les communications entre le navigateur de l&#39;utilisateur et le serveur qui fournit l&#39;information sont gÃ©rÃ©es par le protocole HTTP.
 
-Il a donc fallu créer un format de page lisible par l&#39;ensemble des navigateurs (HTML), un protocole de communication (HTTP) et un système d&#39;identification des pages ou ressources (URI) pour permettre à tous les utilisateurs quel que soit leur ordinateur, leur système d&#39;exploitation et leur navigateur de pourvoir consulter les mêmes informations disponibles à travers le web.
+Il a donc fallu crÃ©er un format de page lisible par l&#39;ensemble des navigateurs (HTML), un protocole de communication (HTTP) et un systÃ¨me d&#39;identification des pages ou ressources (URI) pour permettre Ã  tous les utilisateurs quel que soit leur ordinateur, leur systÃ¨me d&#39;exploitation et leur navigateur de pourvoir consulter les mÃªmes informations disponibles Ã  travers le web.
 
-Cet ensemble de règles est définie par le W3C (World Wide Web Consortium) qui est une association ou organisme de standardisation chargé de promouvoir la compatibilité des technologies du web telles que HTML, XML, RDF, SPARQL,…
+Cet ensemble de rÃ¨gles est dÃ©finie par le W3C (World Wide Web Consortium) qui est une association ou organisme de standardisation chargÃ© de promouvoir la compatibilitÃ© des technologies du web telles que HTML, XML, RDF, SPARQL,â€¦
 
-Les développeurs des navigateurs doivent suivre ces recommandations et faire évoluer en permanence leur application afin qu&#39;elles restent compatibles avec ces technologies.
+Les dÃ©veloppeurs des navigateurs doivent suivre ces recommandations et faire Ã©voluer en permanence leur application afin qu&#39;elles restent compatibles avec ces technologies.
 
-A l&#39;origine on parlait de web statique car il permettait seulement de diffuser des pages d&#39;informations statiques sur lesquelles les utilisateurs ne pouvaient pas agir.  Est apparu ensuite le web dynamique qui permet une interaction entre l&#39;utilisateur et le serveur faisant évoluer les données du web (apparition de blog, forum, formulaire de saisie,…). On parle ensuite de web de données où les données sont réutilisables comme dans une base de données et de web sémantique dans lequel on y rajoute sa description et les différentes relations existantes.
+A l&#39;origine on parlait de web statique car il permettait seulement de diffuser des pages d&#39;informations statiques sur lesquelles les utilisateurs ne pouvaient pas agir.  Est apparu ensuite le web dynamique qui permet une interaction entre l&#39;utilisateur et le serveur faisant Ã©voluer les donnÃ©es du web (apparition de blog, forum, formulaire de saisie,â€¦). On parle ensuite de web de donnÃ©es oÃ¹ les donnÃ©es sont rÃ©utilisables comme dans une base de donnÃ©es et de web sÃ©mantique dans lequel on y rajoute sa description et les diffÃ©rentes relations existantes.
+*********************************************************
+L&#39;Open Data est une pratique qui consiste Ã  publier des donnÃ©es numÃ©riques publiques afin de les rendre accessibles aux usagers Ã  travers le web. Il s&#39;appuie sur les mÃ©canismes du web de donnÃ©es qui considÃ¨re les donnÃ©es comme si elles Ã©taient dans une base de donnÃ©es avec la dimension de rÃ©utilisation puisque le principal objectif de l&#39;open data est d&#39;Ãªtre libre de pouvoir la rÃ©utiliser.
 
-L&#39;Open Data est une pratique qui consiste à publier des données numériques publiques afin de les rendre accessibles aux usagers à travers le web. Il s&#39;appuie sur les mécanismes du web de données qui considère les données comme si elles étaient dans une base de données avec la dimension de réutilisation puisque le principal objectif de l&#39;open data est d&#39;être libre de pouvoir la réutiliser.
+MalgrÃ© une lÃ©gislation mise en place en Europe et dans certains pays qui imposent aux collectivitÃ©s et organismes publics de publier certaines donnÃ©es, dans la pratique on se rend vite compte que ce n&#39;est qu&#39;un leurre. En effet, pour qu&#39;une donnÃ©e soit ouverte, il faut qu&#39;elle soit accessible, sans authentification, dans un format exploitable, documentÃ©e et surtout actualisÃ©e. TrÃ¨s peu le sont en rÃ©alitÃ©. AprÃ¨s de nombreuses heures Ã  rechercher des donnÃ©es dans divers domaines on trouve facilement des donnÃ©es exportables au format csv (par exemple) mais trÃ¨s peu d&#39;API qui permettent d&#39;y accÃ©der directement sans authentification.
 
-Malgré une législation mise en place en Europe et dans certains pays qui imposent aux collectivités et organismes publics de publier certaines données, dans la pratique on se rend vite compte que ce n&#39;est qu&#39;un leurre. En effet, pour qu&#39;une donnée soit ouverte, il faut qu&#39;elle soit accessible, sans authentification, dans un format exploitable, documentée et surtout actualisée. Très peu le sont en réalité. Après de nombreuses heures à rechercher des données dans divers domaines on trouve facilement des données exportables au format csv (par exemple) mais très peu d&#39;API qui permettent d&#39;y accéder directement sans authentification.
+Les API sont essentielles car elles permettent d&#39;accÃ©der automatiquement aux donnÃ©es externes mises Ã  disposition par un fournisseur. Une API est un programme qui sert d&#39;interface entre l&#39;application qui mÃ©lange les donnÃ©es (Mashup) et les donnÃ©es extÃ©rieures fournies. Pour Ãªtre performante une API doit Ãªtre utilisable par le plus grand nombre.
 
-Les API sont essentielles car elles permettent d&#39;accéder automatiquement aux données externes mises à disposition par un fournisseur. Une API est un programme qui sert d&#39;interface entre l&#39;application qui mélange les données (Mashup) et les données extérieures fournies. Pour être performante une API doit être utilisable par le plus grand nombre.
+L&#39;interopÃ©rabilitÃ© est l&#39;Ã©lÃ©ment clÃ© dans ce cadre d&#39;utilisation car les donnÃ©es fournies doivent Ãªtre dans un format normalisÃ© (JSON, XML), clairement dÃ©crites pour Ãªtre comprÃ©hensibles (interopÃ©rabilitÃ© sÃ©mantique : XML RDF), et documentÃ©es.
 
-L&#39;interopérabilité est l&#39;élément clé dans ce cadre d&#39;utilisation car les données fournies doivent être dans un format normalisé (JSON, XML), clairement décrites pour être compréhensibles (interopérabilité sémantique : XML RDF), et documentées.
+La Data science qui consiste Ã  extraire des donnÃ©es afin de les analyser est un mÃ©lange entre la statistique infÃ©rentielle, le dÃ©veloppement d&#39;algorithme et la technologie, dont l&#39;objectif est la rÃ©solution de problÃ¨mes analytiques complexes. Elle prend un essor depuis plusieurs annÃ©es grÃ¢ce au dÃ©veloppement du Big Data qui permet le traitement d&#39;un grand volume de donnÃ©es.
 
-La Data science qui consiste à extraire des données afin de les analyser est un mélange entre la statistique inférentielle, le développement d&#39;algorithme et la technologie, dont l&#39;objectif est la résolution de problèmes analytiques complexes. Elle prend un essor depuis plusieurs années grâce au développement du Big Data qui permet le traitement d&#39;un grand volume de données.
+Or plus une donnÃ©e est complÃ¨te, riche et pertinente plus elle sera probante pour le data scientist.
 
-Or plus une donnée est complète, riche et pertinente plus elle sera probante pour le data scientist.
+Le mÃ©tier de data scientist consiste avant tout Ã  s&#39;approprier le sujet et la problÃ©matique, c&#39;est-Ã -dire le domaine mÃ©tier. Ensuite il doit explorer les donnÃ©es qui sont disponibles, par exemple dans les datawarehouse de l&#39;entreprise, via les services web internes ou externes, les chercher dans l&#39;open data ou Ã©ventuellement les acheter. Il est possible aussi de croiser les donnÃ©es de diffÃ©rentes sources dispersÃ©es.
 
-Le métier de data scientist consiste avant tout à s&#39;approprier le sujet et la problématique, c&#39;est-à-dire le domaine métier. Ensuite il doit explorer les données qui sont disponibles, par exemple dans les datawarehouse de l&#39;entreprise, via les services web internes ou externes, les chercher dans l&#39;open data ou éventuellement les acheter. Il est possible aussi de croiser les données de différentes sources dispersées.
+Les donnÃ©es recueillies permettront ainsi de crÃ©er des modÃ¨les d&#39;analyse et des algorithmes pour ainsi dÃ©gager des tendances, Ã©laborer des profils, faire des prÃ©dictionsâ€¦ Cela apporte une rÃ©elle valeur ajoutÃ©e Ã  l&#39;entreprise dans la prise de dÃ©cision dans de nombreux domaines.
 
-Les données recueillies permettront ainsi de créer des modèles d&#39;analyse et des algorithmes pour ainsi dégager des tendances, élaborer des profils, faire des prédictions… Cela apporte une réelle valeur ajoutée à l&#39;entreprise dans la prise de décision dans de nombreux domaines.
+****************************************************************************************************
 
+En conclusion, je pourrai dire qu&#39;un gros travail est Ã  faire auprÃ¨s des organisations publiques et des collectivitÃ©s afin qu&#39;elles respectent le cadre lÃ©gal de l&#39;open data. En effet, seules 8% des collectivitÃ©s publient des donnÃ©es numÃ©riques. Les multiples plaintes auprÃ¨s de la CADA (commission d&#39;accÃ¨s aux documents administratifs) tÃ©moignent du retard dans la mise en place de l&#39;open data dans l&#39;administration franÃ§aise.
 
+Il ne suffit pas de mettre Ã  disposition des informations sous forme numÃ©rique (exemple photographie d&#39;un document manuscrit enregistrÃ© au format pdf) pour croire que l&#39;on fait de l&#39;open data !
 
-En conclusion, je pourrai dire qu&#39;un gros travail est à faire auprès des organisations publiques et des collectivités afin qu&#39;elles respectent le cadre légal de l&#39;open data. En effet, seules 8% des collectivités publient des données numériques. Les multiples plaintes auprès de la CADA (commission d&#39;accès aux documents administratifs) témoignent du retard dans la mise en place de l&#39;open data dans l&#39;administration française.
-
-Il ne suffit pas de mettre à disposition des informations sous forme numérique (exemple photographie d&#39;un document manuscrit enregistré au format pdf) pour croire que l&#39;on fait de l&#39;open data !
-
-Une des perspectives de ma future carrière de data scientist au sein de l&#39;Education Nationale sera d&#39;acculturer les décideurs et surtout les détenteurs de la donnée numérique aux enjeux de l&#39;open data.
+Une des perspectives de ma future carriÃ¨re de data scientist au sein de l&#39;Education Nationale sera d&#39;acculturer les dÃ©cideurs et surtout les dÃ©tenteurs de la donnÃ©e numÃ©rique aux enjeux de l&#39;open data.
 
