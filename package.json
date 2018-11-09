@@ -25,6 +25,7 @@
     "isomorphic-fetch": "^2.2.1",
     "mongoose": "^5.3.9",
     "node-blablacar": "^1.0.2",
+    "rapidapi-connect": "0.0.6",
     "request": "^2.88.0"
   }
 }
