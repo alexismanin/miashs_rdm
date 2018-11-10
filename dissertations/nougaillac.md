@@ -2,7 +2,7 @@
 
 **DISSERTATION**
 ==
-**Auteur : Maryse Bichon-Nougaillac**
+**Maryse Bichon-Nougaillac - novembre 2018**
 
 **En quoi l&#39;interopérabilité est-elle un élément essentiel pour l&#39;Open Data et dans le domaine de la data science ?**
 --
