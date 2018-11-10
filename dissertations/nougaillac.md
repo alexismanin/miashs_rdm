@@ -54,6 +54,7 @@ En conclusion, je pourrai dire qu&#39;un gros travail est à faire auprès des o
 Il ne suffit pas de mettre à disposition des informations sous forme numérique (exemple photographie d&#39;un document manuscrit enregistré au format pdf) pour croire que l&#39;on fait de l&#39;open data !
 
 Une des perspectives de ma future carrière de data scientist au sein de l&#39;Education Nationale sera d&#39;acculturer les décideurs et surtout les détenteurs de la donnée numérique aux enjeux de l&#39;open data.
+****************************************************************************************************
 
 **Références :**   
 Cours Antoine Seilles https://github.com/natoine/coursum32018    
