@@ -3,7 +3,7 @@ const request = require("request")
 function extractUrbanAreaLink(cityDoc) {
   const ua = cityDoc["_links"]['city:urban_area'];
   if (ua == null || ua.href == null) {
-    throw new Error("No urban area defined");
+    return null;
   }
 
   return ua.href;
@@ -22,6 +22,20 @@ module.exports = function(app) {
 
          const cityObj = JSON.parse(cityBody)
          const uaLink = extractUrbanAreaLink(cityObj);
+         if (uaLink == null) {
+           resp.send({
+             population: cityObj.population,
+             bbox: {
+               latlon: {
+                 south: cityObj.location.latlon.latitude - 0.05,
+                 north: cityObj.location.latlon.latitude + 0.05,
+                 west: cityObj.location.latlon.longitude - 0.05,
+                 east: cityObj.location.latlon.longitude + 0.05
+               }
+             }
+           })
+           return;
+         }
          request.get(uaLink, (error, resp3, uaBody) => {
            uaObj = JSON.parse(uaBody)
            request.get(uaObj._links["ua:images"].href, (error, resp4, imgBody) => {

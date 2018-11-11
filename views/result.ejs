@@ -163,7 +163,7 @@
 		</div>
 
 			<script>
-			TeleportAutocomplete.init('#depart').on('change', function(value) {});
+				TeleportAutocomplete.init('#depart').on('change', function(value) {});
 	 			TeleportAutocomplete.init('#arrive').on('change', function(value) {
 					document.querySelector("#arriveid").value = value.geonameId;
 	 			 });
@@ -172,9 +172,15 @@
 					.then((response) => response.json())
 					.then((respObj) => {
 						document.getElementById("population").innerHTML = respObj.population + ' habitants'
-						document.getElementById("mayor").innerHTML = respObj.mayor
-						document.getElementById("cityimg").src = respObj.photo.image.mobile
-						document.getElementById("citysummary").innerHTML = respObj.summary
+						if (respObj.mayor) {
+							document.getElementById("mayor").innerHTML = respObj.mayor
+					  }
+						if (respObj.photo) {
+							document.getElementById("cityimg").src = respObj.photo.image.mobile
+						}
+						if (respObj.citysummary) {
+							document.getElementById("citysummary").innerHTML = respObj.summary
+					  }
 
 						var boundary = [
 							[respObj.bbox.latlon.south, respObj.bbox.latlon.west],
@@ -186,29 +192,31 @@
 						L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
 							{ attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
 
-						var detail_div = document.getElementById("cityscores");
-						try {
-							respObj.categories.forEach((category) => {
-								var cat_title = document.createElement('span')
-								cat_title.innerHTML = category.name
-								detail_div.appendChild(cat_title)
-								var cat_div = document.createElement('div');
-								cat_div.className = "w3-container";
-								var percent = (category.score_out_of_10*10.0);
-								cat_div.style = "height: 12px; width:"+percent+"%;background-color:"+category.color+"; border-radius:5px; margin-bottom:4px;"
-								//cat_div.innerHTML = ''+ category.score_out_of_10 + ' / 10'
+					  if (respObj.categories) {
+							var detail_div = document.getElementById("cityscores");
+							try {
+								respObj.categories.forEach((category) => {
+									var cat_title = document.createElement('span')
+									cat_title.innerHTML = category.name
+									detail_div.appendChild(cat_title)
+									var cat_div = document.createElement('div');
+									cat_div.className = "w3-container";
+									var percent = (category.score_out_of_10*10.0);
+									cat_div.style = "height: 12px; width:"+percent+"%;background-color:"+category.color+"; border-radius:5px; margin-bottom:4px;"
+									//cat_div.innerHTML = ''+ category.score_out_of_10 + ' / 10'
 
-								var cat_div_parent = document.createElement('div');
-								cat_div_parent.style = "height: 12px; width:100%;background-color:#bbbbbb; border-radius:5px; margin-bottom:4px;"
+									var cat_div_parent = document.createElement('div');
+									cat_div_parent.style = "height: 12px; width:100%;background-color:#bbbbbb; border-radius:5px; margin-bottom:4px;"
 
-								cat_div_parent.appendChild(cat_div)
-								detail_div.appendChild(cat_div_parent)
-							})
-						} catch (error) {
-							console.log(error)
-						}
+									cat_div_parent.appendChild(cat_div)
+									detail_div.appendChild(cat_div_parent)
+								})
+							} catch (error) {
+								console.log(error)
+							}
+					  }
 					})
-					
+
 			</script>
 	</body>
 </html>
