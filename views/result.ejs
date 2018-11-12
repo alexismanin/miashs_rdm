@@ -66,24 +66,57 @@
 					</div>
 				</div>
 				<div class="col-4">
-					<div class="card" id="Flixbus">
-						<div class="card-body">
-							<h5 class="card-title"><img class="mr-2" src="img/skyscanner.png" id="logo" alt="logo_blablacar" height="28" width="28"/>Skyscanner</h5>
-							<% if(SkPrix != null && SkPrix.length!=0){ %>
-								<% for (i = 0; i < SkPrix.length; i++){ %>
-									<span> Prix : <%= SkPrix[i] %> €</span>
-									<h6 class="m-0"> <span class="text-secondary"><u>Aller</u></span> : <%= AeoAllDep[i] %> jusqu'à <%= AeoAllArr[i] %> avec <%= ComAll[i]%></h6>
-									<h6> <span class="text-secondary"><u>Retour</u></span> : <%= AeoRetDep[i] %> jusqu'à <%= AeoRetArr[i] %> avec <%= ComRet[i]%></h6>
-									</br>
-								<% if(i==5){ i=SkPrix.length} %>
-								<% }}else{ %>
-								<%= "Pas de vols disponibles." %>
-							<% } %>
+					<div class="card">
+						<div class="card-body" id="skydiv">
+							<h5 class="card-title"><img class="mr-2" src="img/skyscanner.png" id="logo" alt="logo_Skyscanner" height="28" width="28"/>Skyscanner</h5>
+
 						</div>
+						<script>
+							fetch("/skyscanner?departure=<%= dep %>&arrival=<%= arr %>&since=<%= bb_db %>&until=<%= bb_fin %>")
+								.then(response => response.json())
+								.then(skyResult => {
+									var skydiv = document.querySelector("#skydiv");
+									if (skyResult.length < 1) {
+										var noResult = document.createElement('h5')
+										noResult.innerHTML = "Aucun vol disponible"
+										skydiv.appendChild(noResult)
+									} else {
+										skyResult.forEach(travel => {
+											// TODO better display. Use table ?
+											var price = document.createElement('span')
+											price.innerHTML = "Prix : "+travel.price+" €"
+											skydiv.appendChild(price)
+											var outbound = document.createElement('h6')
+											outbound.innerHTML = "<span class=\"text-secondary\"><u>Aller</u></span> : "
+												+travel.outbound.departure_airport
+												+" jusqu'à "+travel.outbound.arrival_airport
+												+" avec "+travel.outbound.company
+												+ " le "+travel.outbound.date.substring(0, travel.outbound.date.indexOf('T'))
+											skydiv.appendChild(outbound)
+
+											var inbound = document.createElement('h6')
+											inbound.innerHTML = "<span class=\"text-secondary\"><u>Retour</u></span> : "
+												+travel.inbound.departure_airport
+												+" jusqu'à "+travel.inbound.arrival_airport
+												+" avec "+travel.inbound.company
+												+ " le "+travel.inbound.date.substring(0, travel.inbound.date.indexOf('T'))
+											skydiv.appendChild(inbound)
+										})
+									}
+								})
+								// TODO : better error management
+								.catch(error => {
+									console.log(error)
+									var skydiv = document.querySelector("#skydiv");
+									var noResult = document.createElement('h5')
+									noResult.innerHTML = "Aucun vol disponible"
+									skydiv.appendChild(noResult)
+								})
+						</script>
 					</div>
 				</div>
 				<div class="col-4">
-					<div class="card" id="Flixbus">
+					<div class="card" id="searchForm">
 						<div class="card-body">
 							<h5 class="card-title"><img class="mr-2" src="img/calendar.svg" id="logo" alt="logo_blablacar" height="28"/>Changer la recherche ?</h5>
 							<form action="/result" method="post" class="mx-auto d-inline">

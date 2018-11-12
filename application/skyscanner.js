@@ -6,8 +6,11 @@ const request = require("request")
  * Search for airports near given city
  */
 function autosuggest(cityName, responseCallback) {
+  // Skyscanner suggestion does not support accents nor spaces
+  var city = cityName.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+  city = city.replace(/\s+/g, '');
   suggest_options = {
-    url: "https://skyscanner-skyscanner-flight-search-v1.p.mashape.com/apiservices/autosuggest/v1.0/FR/EUR/fr-FR/?query="+cityName,
+    url: "https://skyscanner-skyscanner-flight-search-v1.p.mashape.com/apiservices/autosuggest/v1.0/FR/EUR/fr-FR/?query="+city,
     headers: {
       "X-Mashape-Key": sk_key,
       "X-Mashape-Host": "skyscanner-skyscanner-flight-search-v1.p.mashape.com"
@@ -68,6 +71,7 @@ module.exports = function(app) {
             autosuggest(req.query.arrival, (error, arrivalCity) => {
               if (error) {
                 resp.status(500).send(error.message);
+                return
               }
 
               searchTravels(departureCity, arrivalCity, req.query.since, req.query.until, (error, body) => {
@@ -75,16 +79,58 @@ module.exports = function(app) {
                   resp.status(500).send(error.message)
                 } else {
                   var travels = JSON.parse(body);
-                  for (var j = 0 ; j < 5 && j < travels.Quotes.length ; j++) {
-                      // TODO : convert data structure
+                  var results = []
+                  if (travels != null && travels.Quotes != null) {
+                    for (var j = 0 ; j < 5 && j < travels.Quotes.length ; j++) {
+                        var quote = travels.Quotes[j]
+                        var outbound = {date:quote.OutboundLeg.DepartureDate}
+                        var inbound = {date:quote.InboundLeg.DepartureDate}
+
+                        for(i=0;i<travels.Carriers.length;i++) {
+                          var carrier = travels.Carriers[i]
+                          if(quote.OutboundLeg.CarrierIds[0] == carrier.CarrierId){
+                             outbound.company = carrier.Name;
+                          }
+                          if (quote.InboundLeg.CarrierIds[0] == carrier.CarrierId){
+                             inbound.company = carrier.Name;
+                          }
+
+                          if (inbound.company && outbound.company) {
+                            break;
+                          }
+                        }
+
+                        for (i=0;i<travels.Places.length;i++) {
+                          var place = travels.Places[i]
+
+                          if (quote.OutboundLeg.OriginId==place.PlaceId) {
+                             outbound.departure_airport = place.Name;
+                          } else if (quote.OutboundLeg.DestinationId==place.PlaceId){
+                             outbound.arrival_airport = place.Name;
+                          }
+
+                          if (quote.InboundLeg.OriginId==place.PlaceId) {
+                             inbound.departure_airport = place.Name;
+                          } else if (quote.InboundLeg.DestinationId==place.PlaceId){
+                             inbound.arrival_airport = place.Name;
+                          }
+                        }
+
+                        results.push({
+                          price:quote.MinPrice,
+                          direct:quote.Direct,
+                          outbound: outbound,
+                          inbound: inbound
+                        })
+                    }
                   }
                   resp.set("Content-Type", "application/json")
-                  resp.send(travels)
+                  resp.set("Access-Control-Allow-Origin", "*")
+                  resp.send(results)
                 }
               })
             })
          }
        })
-
      })
    }
