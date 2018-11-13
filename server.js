@@ -33,10 +33,6 @@ var j6 = new Date(now.setDate(now.getDate()+6))
 console.log(j6)
 
 const app = express()
-// Route for city information
-require('./application/teleport.js')(app)
-
-require('./application/skyscanner.js')(app)
 
 // Défini le dossier ou chercher image etc...
 
@@ -44,12 +40,18 @@ app.use( express.static( "public" ) );
 
 // Database client init
 const configDB = require('./config/database.js')
-
+var hits;
 try {
   const db = mongoose.createConnection(configDB.url)
+  hits = require("./application/models/hits.js")
 } catch (error) {
   console.error("No MongoDB url set. Please provide it using environment variable.");
 }
+
+// Route for city information
+require('./application/teleport.js')(app, hits)
+
+require('./application/skyscanner.js')(app)
 
 app.get('/', function (req, res) {
   res.render('index.ejs');

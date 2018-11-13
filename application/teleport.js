@@ -9,7 +9,7 @@ function extractUrbanAreaLink(cityDoc) {
   return ua.href;
 }
 
-module.exports = function(app) {
+module.exports = function(app, hits) {
 
     // get an instance of the router for main routes
      app.get("/cityinfo/:geonameId", (req, resp) => {
@@ -21,6 +21,12 @@ module.exports = function(app) {
          }
 
          const cityObj = JSON.parse(cityBody)
+
+         // HACK : update city top search here, to avoid extra queries when
+         // submitting search form.
+         if (hits) {
+           hits.update({_id: id}, {cityName: cityObj.name, $inc: {hits: 1}}, {upsert: true})
+         }
          const uaLink = extractUrbanAreaLink(cityObj);
          if (uaLink == null) {
            resp.send({
