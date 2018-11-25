@@ -105,8 +105,8 @@
 									}
 								})
 								// TODO : better error management
-								.catch(error => {
-									console.log(error)
+								.catch((error) => {
+									console.log(error.message)
 									var skydiv = document.querySelector("#skydiv");
 									var noResult = document.createElement('h5')
 									noResult.innerHTML = "Aucun vol disponible"
@@ -134,6 +134,10 @@
 								</div>
 								</br>
 								<input hidden id="arriveid" name="arriveid">
+								<h4>Top 5 destinations</h4>
+								<ol id="topsearch" class="list-group">
+									<!-- Filled using top search API-->
+								</ol>
 								<button type="submit" class="btn btn-sm btn-dark d-inline-block">Go !</button>
 							</form>
 						</div>
@@ -245,10 +249,29 @@
 									detail_div.appendChild(cat_div_parent)
 								})
 							} catch (error) {
-								console.log(error)
+								console.log(error.message)
 							}
 					  }
 					})
+
+					// Try to get back top 5 search
+					fetch("/topsearch")
+						.then((response) => response.json())
+						.then((response) => {
+							var topList = document.getElementById("topsearch")
+							try {
+							response.forEach((item) => {
+								console.log(item)
+								li = document.createElement('li')
+								li.innerHTML = item.cityName
+								li.className = "list-group-item"
+								topList.appendChild(li)
+							})
+							} catch (error) {
+								console.error("Top 5: "+error.message)
+							}
+						})
+						.catch((error) => console.error(error.message))
 
 			</script>
 	</body>

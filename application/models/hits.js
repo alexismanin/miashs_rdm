@@ -13,10 +13,10 @@ module.exports = function(app, db) {
   	// TODO : add query parameters to customize returned information.
 	  try {
 	  	hits.find()
-	  		.sort('hits')
+	  		.sort('-hits')
 	  		.limit(5)
 	  		.then(data => resp.send(data))
-	  		.onError(error => console.error("MongoDB Top search query failed. Cause:"+error.message))
+	  		.catch(error => console.error("MongoDB Top search query failed. Cause: "+error.message))
 	  } catch (error) {
 	  	console.error("MongoDB Top search query failed. Cause:"+error.message)
 	  }
