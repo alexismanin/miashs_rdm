@@ -63,74 +63,75 @@ module.exports = function(app) {
            resp.status(400).send("Missing query parameter since (departure date)")
        } else if (req.query.until == null || req.query.until == '') {
            resp.status(400).send("Missing query parameter until (return date)")
-       }
-       autosuggest(req.query.departure, (error, departureCity) => {
-         if (error) {
-           resp.status(500).send(error.message);
-         } else {
-            autosuggest(req.query.arrival, (error, arrivalCity) => {
-              if (error) {
-                resp.status(500).send(error.message);
-                return
-              }
-
-              searchTravels(departureCity, arrivalCity, req.query.since, req.query.until, (error, body) => {
+       } else {
+         autosuggest(req.query.departure, (error, departureCity) => {
+           if (error) {
+             resp.status(500).send(error.message);
+           } else {
+              autosuggest(req.query.arrival, (error, arrivalCity) => {
                 if (error) {
-                  resp.status(500).send(error.message)
-                } else {
-                  var travels = JSON.parse(body);
-                  var results = []
-                  if (travels != null && travels.Quotes != null) {
-                    for (var j = 0 ; j < 5 && j < travels.Quotes.length ; j++) {
-                        var quote = travels.Quotes[j]
-                        var outbound = {date:quote.OutboundLeg.DepartureDate}
-                        var inbound = {date:quote.InboundLeg.DepartureDate}
-
-                        for(i=0;i<travels.Carriers.length;i++) {
-                          var carrier = travels.Carriers[i]
-                          if(quote.OutboundLeg.CarrierIds[0] == carrier.CarrierId){
-                             outbound.company = carrier.Name;
-                          }
-                          if (quote.InboundLeg.CarrierIds[0] == carrier.CarrierId){
-                             inbound.company = carrier.Name;
-                          }
-
-                          if (inbound.company && outbound.company) {
-                            break;
-                          }
-                        }
-
-                        for (i=0;i<travels.Places.length;i++) {
-                          var place = travels.Places[i]
-
-                          if (quote.OutboundLeg.OriginId==place.PlaceId) {
-                             outbound.departure_airport = place.Name;
-                          } else if (quote.OutboundLeg.DestinationId==place.PlaceId){
-                             outbound.arrival_airport = place.Name;
-                          }
-
-                          if (quote.InboundLeg.OriginId==place.PlaceId) {
-                             inbound.departure_airport = place.Name;
-                          } else if (quote.InboundLeg.DestinationId==place.PlaceId){
-                             inbound.arrival_airport = place.Name;
-                          }
-                        }
-
-                        results.push({
-                          price:quote.MinPrice,
-                          direct:quote.Direct,
-                          outbound: outbound,
-                          inbound: inbound
-                        })
-                    }
-                  }
-                  resp.set("Content-Type", "application/json")
-                  resp.set("Access-Control-Allow-Origin", "*")
-                  resp.send(results)
+                  resp.status(500).send(error.message);
+                  return
                 }
+
+                searchTravels(departureCity, arrivalCity, req.query.since, req.query.until, (error, body) => {
+                  if (error) {
+                    resp.status(500).send(error.message)
+                  } else {
+                    var travels = JSON.parse(body);
+                    var results = []
+                    if (travels != null && travels.Quotes != null) {
+                      for (var j = 0 ; j < 5 && j < travels.Quotes.length ; j++) {
+                          var quote = travels.Quotes[j]
+                          var outbound = {date:quote.OutboundLeg.DepartureDate}
+                          var inbound = {date:quote.InboundLeg.DepartureDate}
+
+                          for(i=0;i<travels.Carriers.length;i++) {
+                            var carrier = travels.Carriers[i]
+                            if(quote.OutboundLeg.CarrierIds[0] == carrier.CarrierId){
+                               outbound.company = carrier.Name;
+                            }
+                            if (quote.InboundLeg.CarrierIds[0] == carrier.CarrierId){
+                               inbound.company = carrier.Name;
+                            }
+
+                            if (inbound.company && outbound.company) {
+                              break;
+                            }
+                          }
+
+                          for (i=0;i<travels.Places.length;i++) {
+                            var place = travels.Places[i]
+
+                            if (quote.OutboundLeg.OriginId==place.PlaceId) {
+                               outbound.departure_airport = place.Name;
+                            } else if (quote.OutboundLeg.DestinationId==place.PlaceId){
+                               outbound.arrival_airport = place.Name;
+                            }
+
+                            if (quote.InboundLeg.OriginId==place.PlaceId) {
+                               inbound.departure_airport = place.Name;
+                            } else if (quote.InboundLeg.DestinationId==place.PlaceId){
+                               inbound.arrival_airport = place.Name;
+                            }
+                          }
+
+                          results.push({
+                            price:quote.MinPrice,
+                            direct:quote.Direct,
+                            outbound: outbound,
+                            inbound: inbound
+                          })
+                      }
+                    }
+                    resp.set("Content-Type", "application/json")
+                    resp.set("Access-Control-Allow-Origin", "*")
+                    resp.send(results)
+                  }
+                })
               })
-            })
-         }
-       })
+           }
+         })
+      }
      })
    }
