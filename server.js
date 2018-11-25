@@ -41,11 +41,15 @@ app.use( express.static( "public" ) );
 // Database client init
 const configDB = require('./config/database.js')
 var hits;
-try {
-  const db = mongoose.createConnection(configDB.url)
-  hits = require("./application/models/hits.js")
-} catch (error) {
-  console.error("No MongoDB url set. Please provide it using environment variable.");
+if (configDB == null || configDB.url == null) {
+	console.error("No MongoDB url set. Please provide it using environment variable.");
+} else {
+	try {
+	  const db = mongoose.createConnection(configDB.url)
+	  hits = require("./application/models/hits.js")(app, db)
+	} catch (error) {
+	  console.error("Cannot init MongoDB connection. Cause: "+error.message);
+	}
 }
 
 // Route for city information

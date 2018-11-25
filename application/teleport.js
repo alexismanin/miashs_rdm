@@ -25,7 +25,16 @@ module.exports = function(app, hits) {
          // HACK : update city top search here, to avoid extra queries when
          // submitting search form.
          if (hits) {
-           hits.update({_id: id}, {cityName: cityObj.name, $inc: {hits: 1}}, {upsert: true})
+           hits.update(
+            {_id: id},
+            {cityName: cityObj.name, $inc: {hits: 1}},
+            {upsert: true},
+            (err, obj) => {
+              if (err != null) {
+                console.error("Cannot update search count: "+err.message)
+              }
+            }
+           )
          }
          const uaLink = extractUrbanAreaLink(cityObj);
          if (uaLink == null) {
