@@ -111,10 +111,10 @@ app.get('/', function (req, res) {
 		};
 
 			function we_callback(error, response, body) {
-        if (error || response.statusCode != 200) {
-          res.status(500).send("An error occurred while querying blablacar")
-          return;
-        }
+				if (error || response.statusCode != 200) {
+				  res.status(500).send("An error occurred while querying blablacar")
+				  return;
+				}
 
 				var we2_request = require("request");
 				var we_city_result = JSON.parse(body);
@@ -123,8 +123,55 @@ app.get('/', function (req, res) {
 				// Je ne comprends pas ce if mais il fonctionne
 
 				if(we_city_result.length == 0){
-					var sky = "nometeo"
-          res.render('result.ejs', {loin:false, bb_db:bb_db, bb_fin:bb_fin, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],arrive_id: arrive_id});
+					
+					// Books
+					
+					var books_request = require("request");
+					
+					var books_options = {
+						url: "http://openlibrary.org/search.json?title="+bb_tn
+					};
+					
+					function books_callback(error, response, body) {
+						if (error || response.statusCode != 200) {
+						  res.status(500).send("An error occurred while querying blablacar")
+						  return;
+						}
+						
+						var books_result = JSON.parse(body);
+						
+						console.log(books_result);
+						
+						nb_books = books_result.docs.length
+						
+						if(nb_books>10){
+							nb_books = 10
+						}
+						
+						var tab_books_title = []
+						var tab_books_link = []
+						var tab_books_author = []
+						
+						for (var i = 0; i < nb_books; i++) {
+						  tab_books_title.push(books_result.docs[i].title_suggest);
+						  
+						  // http://openlibrary.org/
+						  
+						  tab_books_link.push(books_result.docs[i].seed[0]);
+						  
+						  tab_books_author.push(books_result.docs[i].author_name[0]);
+						}
+						
+						var sky = "nometeo"
+						res.render('result.ejs', {loin:false, bb_db:bb_db, bb_fin:bb_fin, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:[], temp:[],arrive_id: arrive_id, tab_books_title : tab_books_title, tab_books_link: tab_books_link, tab_books_author : tab_books_author});
+				
+						
+					}
+					
+					books_request(books_options, books_callback);
+			
+					// Books
+					
 				}
 				else{
 
@@ -164,10 +211,10 @@ app.get('/', function (req, res) {
 
 					function we2_callback(error, response, body) {
 
-            if (error || response.statusCode != 200) {
-              res.status(500).send("An error occurred while querying weather")
-              return;
-            }
+						if (error || response.statusCode != 200) {
+						  res.status(500).send("An error occurred while querying weather")
+						  return;
+						}
 
 						var we2_result = JSON.parse(body);
 						if(sky.length<3){
@@ -196,8 +243,54 @@ app.get('/', function (req, res) {
 
 						}
 						else{
-                res.render('result.ejs', {loin:loin, bb_db:bb_db, bb_fin:bb_fin, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:day, temp:temp,arrive_id: arrive_id});
-                return;
+							
+							// Books
+							
+							var books_request = require("request");
+							
+							var books_options = {
+								url: "http://openlibrary.org/search.json?title="+bb_tn
+							};
+							
+							function books_callback(error, response, body) {
+								if (error || response.statusCode != 200) {
+								  res.status(500).send("An error occurred while querying blablacar")
+								  return;
+								}
+								
+								var books_result = JSON.parse(body);
+								
+								console.log(books_result);
+								
+								nb_books = books_result.docs.length
+								
+								if(nb_books>10){
+									nb_books = 10
+								}
+								
+								var tab_books_title = []
+								var tab_books_link = []
+								var tab_books_author = []
+								
+								for (var i = 0; i < nb_books; i++) {
+								  tab_books_title.push(books_result.docs[i].title_suggest);
+								  
+								  // http://openlibrary.org/
+								  
+								  tab_books_link.push(books_result.docs[i].seed[0]);
+								  
+								  tab_books_author.push(books_result.docs[i].author_name[0]);
+								}
+								
+								res.render('result.ejs', {loin:loin, bb_db:bb_db, bb_fin:bb_fin, dep: bb_fn, arr: bb_tn, alle: bb_db.slice(8, 10)+"/"+bb_db.slice(5, 7)+"/"+bb_db.slice(0, 4), reto: bb_fin.slice(8, 10)+"/"+bb_fin.slice(5, 7)+"/"+bb_db.slice(0, 4), bb_result: bb_result, sky: sky, day:day, temp:temp,arrive_id: arrive_id, tab_books_title : tab_books_title, tab_books_link: tab_books_link, tab_books_author: tab_books_author});
+								return;
+								
+							}
+							
+							books_request(books_options, books_callback);
+							
+							// Books
+							
 						}
 					}
 
