@@ -170,6 +170,16 @@
 							<% } %>
 						</div>
 					</div>
+					<div class="card mt-3" id="Books">
+						<div class="card-body">
+							<h5 class="card-title">Quelques livres sur votre destination :</h5>
+							<div class=" text-center">
+								<% for (i = 0; i < tab_books_title.length; i++){ %>
+								<a href="http://openlibrary.org/<%= tab_books_link[i] %>"> <%= tab_books_title[i] %> par <%= tab_books_author[i] %></a></br>
+								<% } %>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="col-6">
 					<div class="card" id="InfoVille">
